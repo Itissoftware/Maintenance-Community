@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:text="โปรไฟล์" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_avatar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/headshot_7" />
+
+                <TextView
+                    android:id="@+id/text_view_display_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/img_avatar"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toEndOf="@+id/img_avatar"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/text_color_icon"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/text_view_connection_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="right"
+                    android:paddingEnd="@dimen/connection_status_padding"
+                    android:text="Online" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/cardList_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

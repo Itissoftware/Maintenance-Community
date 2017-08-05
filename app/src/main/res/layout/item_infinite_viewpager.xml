@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="139dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="vertical">
+
+            <com.mncomunity1.until.MyTextView
+                android:id="@+id/item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:singleLine="true"
+                android:text="Name"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:visibility="visible" />
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="match_parent"
+            android:layout_height="135dp"
+            android:layout_alignLeft="@+id/item_name"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitXY" />
+
+    </LinearLayout>
+</RelativeLayout>

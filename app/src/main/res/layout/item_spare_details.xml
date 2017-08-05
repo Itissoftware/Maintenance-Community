@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_whith"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/ls_onclick"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@color/color_whith"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="2dp"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000"
+                android:textSize="@dimen/text_size_14" />
+
+            <TextView
+                android:id="@+id/title_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="2dp"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#3300CC"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

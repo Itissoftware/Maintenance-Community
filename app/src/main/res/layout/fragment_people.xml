@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefefee">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="เพื่อน"
+                        android:textColor="#646464"
+                        android:textSize="20dp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/txt_add"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="right"
+                        android:text="เพิ่มเพื่อน"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="15dp"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_add_fridends"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="เพิ่มเพื่อน"
+                    android:textColor="#646464"
+                    android:textSize="50dp"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycleListFriend"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:background="#efefefee"
+                    android:visibility="visible" />
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</RelativeLayout>

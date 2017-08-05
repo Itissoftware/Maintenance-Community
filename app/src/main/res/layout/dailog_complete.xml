@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/rl_quit_learning"
+        android:layout_width="250dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="100dp"
+                    android:textSize="15dp"
+                    android:layout_gravity="center"
+                   android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="ส่งข้อมูลเสร็จ"
+
+                    android:textColor="@color/color_black" />
+
+                <Button
+                    android:text="ตกลง"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="14dp"
+                    android:id="@+id/btn_ok"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/color_whith"
+                    android:background="#B71C1C"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

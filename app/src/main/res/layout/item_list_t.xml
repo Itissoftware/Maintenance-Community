@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:id="@+id/ls_onclick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_whith"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/img_cover"
+                android:layout_width="120dp"
+                android:layout_height="90dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Medium Text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#000"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txt_ts"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="bottom"
+                        android:gravity="left"
+                        android:textSize="10dp"
+                        android:visibility="gone"
+                        android:layout_marginLeft="20dp"
+                        android:text="ts"
+                        android:textColor="#CC0033"
+                        android:textStyle="bold" />
+
+
+
+                    <TextView
+                        android:id="@+id/txt_n"
+                        android:visibility="gone"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="left"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:text="NEW!"
+                        android:textColor="#CC0033"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

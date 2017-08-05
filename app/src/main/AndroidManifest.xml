@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mncomunity1">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.mncomunity1.activity.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.mncomunity1.activity.LoginActivity"/>
+        <activity
+            android:name="com.mncomunity1.activity.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme" />
+        <activity android:name="com.mncomunity1.MainActivity" />
+        <activity
+            android:name="com.mncomunity1.activity.ListActivity"
+            android:label="@string/title_activity_list"
+            android:theme="@style/AppTheme" />
+        <activity android:name="com.mncomunity1.activity.ContactActivity" />
+        <activity android:name="com.mncomunity1.activity.RegisterCodeActivity" />
+        <activity
+            android:name="com.mncomunity1.activity.SpareActivity"
+            android:label="@string/title_activity_spare"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mncomunity1.activity.SpareDetailActivity"
+            android:label="@string/title_activity_spare_detail"
+            android:theme="@style/AppTheme" />
+        <activity android:name="com.mncomunity1.activity.MoreActivity" />
+        <activity android:name="com.mncomunity1.activity.CompanyDetailActivity" />
+        <activity android:name="com.mncomunity1.activity.LogActivity" />
+        <activity android:name="com.mncomunity1.activity.MorePoActivity" />
+        <activity android:name="com.mncomunity1.activity.PoActivity" />
+        <activity
+            android:name="com.mncomunity1.activity.TestActivity"
+            android:label="@string/title_activity_test"
+            android:theme="@style/AppTheme" />
+
+        <!-- Firebase Notifications -->
+        <service android:name="com.mncomunity1.service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="com.mncomunity1.service.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- ./Firebase Notifications -->
+
+        <activity
+            android:name="com.mncomunity1.activity.SearchResultActivity"
+            android:label="@string/title_activity_search_result"
+            android:theme="@style/AppTheme"></activity>
+
+        <activity android:name="com.mncomunity1.activity.SubGroupActivity"/>
+        <activity android:name="com.mncomunity1.activity.NewstActivity"/>
+        <activity android:name="com.mncomunity1.activity.TabsActivity"/>
+        <activity android:name="com.mncomunity1.activity.CartTotalActivity"/>
+        <activity android:name="com.mncomunity1.activity.ArticlesActivity"/>
+        <activity android:name="com.mncomunity1.activity.WebActivity"/>
+        <activity android:name="com.mncomunity1.activity.WebTabActivity"/>
+        <activity android:name=".activity.HistoryOrderActivity"/>
+        <activity android:name=".activity.TabsOrderActivity"/>
+        <activity android:name=".activity.CompanyOrderActivity"/>
+        <activity android:name=".activity.HistoryOrderActivity2"/>
+        <activity android:name=".activity.SoonActivity"/>
+
+        <activity android:name=".activity.ListNewsActivity"/>
+        <activity android:name=".activity.KnowledgeActivity"/>
+
+        <activity android:name=".activity.ParseJsonActivity"/>
+        <activity android:name=".activity.DetailsSpareActivity"/>
+        <activity android:name=".activity.VendorOrderActivity"/>
+        <activity android:name=".activity.OrderDetailsForVendorActivity"/>
+        <activity android:name=".activity.SettingsActivity"/>
+        <activity android:name=".DailogActivity"
+            android:theme="@android:style/Theme.Translucent"/>
+        <activity android:name=".activity.SplashChat"/>
+
+        <activity android:name=".pack_chat.MainActivityChat"/>
+        <activity android:name=".pack_chat.ui.AddGroupActivity"/>
+        <activity android:name=".pack_chat.ui.ChatActivity"/>
+        <activity android:name=".pack_chat.ui.RegisterActivity"/>
+        <activity android:name=".pack_chat.ui.LoginActivityChat"/>
+        <activity android:name=".pack_chat.ui.PhotoActivity"/>
+
+        <service android:name=".pack_chat.service.FriendChatService"
+            android:exported="false"
+            android:persistent= "true" />
+
+    </application>
+
+</manifest>

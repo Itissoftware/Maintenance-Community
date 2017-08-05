@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefefee"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:background="@color/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:titleTextColor="#ffffff">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+
+
+                        <com.mncomunity1.until.MyTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:gravity="left"
+                            android:text="กลุ่มสินค้า"
+                            android:textColor="@color/color_whith"
+                            android:textSize="20dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="10dp"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal">
+
+                                <RelativeLayout
+                                    android:id="@+id/badge4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/badge2"
+                                    android:gravity="right">
+
+                                    <RelativeLayout
+                                        android:id="@+id/relative_layout2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+
+                                        <ImageView
+                                            android:id="@+id/img_cart"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"
+                                            android:layout_marginTop="5dp"
+                                            android:src="@drawable/cart" />
+
+
+                                    </RelativeLayout>
+
+                                    <TextView
+                                        android:id="@+id/badge_notification_5"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignRight="@id/relative_layout2"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginTop="1dp"
+                                        android:background="@drawable/badge_noti_count"
+                                        android:text="0"
+                                        android:textColor="#FFF"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold"
+                                        android:visibility="gone" />
+
+                                    <TextView
+                                        android:id="@+id/badge_notification_6"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignRight="@id/relative_layout2"
+                                        android:layout_marginTop="4dp"
+                                        android:background="@drawable/badge_item_spare"
+                                        android:text="0"
+                                        android:textColor="#FFF"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold"
+                                        android:visibility="visible" />
+
+
+                                </RelativeLayout>
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.Toolbar>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#efefefee"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:id="@+id/td_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="ค้นหาสินค้า"
+            android:textColor="@color/color_black"
+            android:textColorHint="#C0C0C0"
+            android:textSize="@dimen/text_size_14" />
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/border_edit_login"
+            android:text="ค้นหา"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_10" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cardList_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
+</LinearLayout>

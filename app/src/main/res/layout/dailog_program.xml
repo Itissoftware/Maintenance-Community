@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/rl_quit_learning"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/sp_main"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+
+            </Spinner>
+
+            <EditText
+                android:id="@+id/et_"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#37474f" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_weight="1"
+                android:text="ตกลง"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/btn_submit"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/color_whith"
+                android:background="#B71C1C"
+                android:layout_width="100dp"
+                android:layout_height="35dp" />
+
+            <Button
+                android:layout_weight="1"
+                android:text="ยกเลิก"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:id="@+id/btn_cancel"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/color_whith"
+                android:background="#B71C1C"
+                android:layout_width="100dp"
+                android:layout_height="35dp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

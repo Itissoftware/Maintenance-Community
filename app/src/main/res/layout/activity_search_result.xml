@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefefee"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/activity_toobar" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#efefefee"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:id="@+id/td_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="ค้นหาอะไหล่"
+            android:textColor="@color/color_black"
+            android:textColorHint="#C0C0C0"
+            android:textSize="@dimen/text_size_14" />
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/border_edit_login"
+            android:text="ค้นหา"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_10" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cardList_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

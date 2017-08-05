@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/rl_quit_learning"
+        android:layout_width="320dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:src="@drawable/ic_pmii"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_gravity="center"
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="   ยินดีต้อนรับสู่ CMMS (Computerized Maintenance Management System)
+                การจัดการระบบงานบำรุงรักษาด้วยเทคโนโลยีบนระบบมาตรฐาน PMII ซึ่งมุ่งเน้นการพัฒนาหน่วยงานบำรุงรักษาด้วยเทคโนโลยี นำไปสู่การพัฒนาอย่างมืออาชีพ"
+                android:textColor="@color/color_black" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btn_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_button_create_account"
+                    android:text="สอบถามข้อมูล"
+                    android:textColor="@color/color_whith"
+                    android:textSize="14dp" />
+
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btn_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_button_create_account"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="แจ้งปัญหาโปรแกรม"
+                    android:textColor="@color/color_whith"
+                    android:textSize="14dp" />
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btn_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_button_create_account"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="แชท"
+                    android:textColor="@color/color_whith"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

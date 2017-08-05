@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">Maintenance Community</string>
+    <string name="app_email">Email</string>
+    <string name="app_password">Password</string>
+    <string name="app_hih_email">Your email address</string>
+    <string name="app_hih_password">Your password</string>
+
+    <string name="app_text_cancel">Cancel</string>
+    <string name="app_text_done">Done</string>
+    <string name="app_text_forget">Forgot your password?</string>
+    <string name="app_text_register">Register?</string>
+
+    <string name="app_text_or_sign">Or sign in with your account</string>
+    <string name="app_text_facebook">sign in with Facebook</string>
+    <string name="app_create_an_acoount">Create an account</string>
+    <string name="app_sing_in">Sing in</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_spare">SpareActivity</string>
+    <string name="title_activity_spare_detail">SpareDetailActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_search_result">SearchResultActivity</string>
+
+
+    <!-- LogInActivity-->
+    <string name="login_error_message">Please make sure you enter a username and password!</string>
+    <string name="login_error_title">Checking</string>
+    <string name="title_activity_chat">Chat</string>
+
+    <!-- RegisterActivity-->
+    <string name="error_fields_empty">Please make sure you enter display name, email and password!</string>
+    <string name="error_incorrect_email_pass">Provide correct email and password with more than 6 characters.</string>
+    <string name="title_activity_add_friends">AddFriendsActivity</string>
+    <string name="title_activity_debug">DebugActivity</string>
+
+    <string name="loading">Loading…</string>
+    <string name="title_activity_seting_register">SetingRegisterActivity</string>
+
+    <string name="tab1">เพื่อน</string>
+    <string name="tab2">แชท</string>
+    <string name="tab3">ตั้งค่า</string>
+
+    <string name="action_search">Search</string>
+    <string name="action_chat">Chat</string>
+    <string name="action_new_group">New Group</string>
+    <string name="action_new_broadcast">New broadcast</string>
+    <string name="action_whatsapp_web">WhatsApp Web</string>
+    <string name="action_starred_messages">Starred messages</string>
+    <string name="action_status">Status</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_clear_call_log">Clear call log</string>
+    <string name="action_calls">Calls</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_contacts">Contacts</string>
+    <string name="action_without_icon">Without Icon</string>
+    <string name="action_with_icon">With Icon</string>
+    <string name="action_custom">Custom Tab</string>
+
+    <dimen name="connection_status_padding">8dp</dimen>
+
+    <dimen name="profile_image_size">40dp</dimen>
+    <dimen name="message_image_size">180dp</dimen>
+    <dimen name="add_photo_button_size">60dp</dimen>
+    <dimen name="add_photo_button_padding">10dp</dimen>
+    <dimen name="send_message_button_padding">10dp</dimen>
+    <dimen name="shadow_height">6dp</dimen>
+
+    <string name="login_success">login success</string>
+    <string name="login">LOGIN</string>
+    <string name="Username">Email</string>
+    <string name="Password">Password</string>
+    <string name="forgot_your_password">Forgot your password ?</string>
+    <string name="go">GO</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="next">NEXT</string>
+    <string name="register">REGISTER</string>
+
+    <string name="hint_username">Enter a new username</string>
+    <string name="hint_email_reset">Enter your email</string>
+    <string name="enter_group_name">Enter group name</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+</resources>
