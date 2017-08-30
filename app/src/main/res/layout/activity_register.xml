@@ -61,9 +61,9 @@
             </LinearLayout>
 
             <ScrollView
-                android:scrollbars="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:scrollbars="vertical">
 
 
                 <LinearLayout
@@ -73,6 +73,32 @@
                     android:layout_marginRight="15dp"
                     android:background="@drawable/border_edit_login"
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/chk_public"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ทั่วไป"
+                            android:textSize="12dp"
+                            android:theme="@style/MyCheckBox"
+                            android:textColor="#000000" />
+
+                        <CheckBox
+                            android:id="@+id/chk_pmii"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ลูกค้าPMII"
+                            android:theme="@style/MyCheckBox"
+                            android:textColor="#000000" />
+
+                    </LinearLayout>
 
 
                     <LinearLayout
@@ -397,10 +423,11 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:background="#37474f" />
+
                     <LinearLayout
-                        android:layout_marginTop="3dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
                         android:orientation="vertical">
 
 
@@ -409,11 +436,11 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:textSize="10dp"
-                                android:textColor="#000000"
-                                android:text="    บริการของเราแสดงเนื้อหาบางอย่างที่ไม่ได้เป็นของ Google เนื้อหานี้เป็นความรับผิดชอบแต่เพียงผู้เดียวของบุคคลที่เผยแพร่เนื้อหานั้น เราอาจตรวจสอบเนื้อหาเพื่อพิจารณาว่าเนื้อหานั้นผิดกฎหมายหรือละเมิดนโยบายของเราหรือไม่ และเราอาจนำเนื้อหาออกหรือปฏิเสธที่จะแสดงเนื้อหาที่เราเชื่อโดยมีเหตุผลอันสมควรว่าผิดกฎหมายหรือละเมิดนโยบายของเรา ทั้งนี้ ไม่ได้หมายความว่าเราได้ทำการตรวจสอบเนื้อหาทุกครั้งเสมอไป ดังนั้น โปรดอย่าคาดการณ์ว่าเป็นเช่นนั้น"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:text="    บริการของเราแสดงเนื้อหาบางอย่างที่ไม่ได้เป็นของ Google เนื้อหานี้เป็นความรับผิดชอบแต่เพียงผู้เดียวของบุคคลที่เผยแพร่เนื้อหานั้น เราอาจตรวจสอบเนื้อหาเพื่อพิจารณาว่าเนื้อหานั้นผิดกฎหมายหรือละเมิดนโยบายของเราหรือไม่ และเราอาจนำเนื้อหาออกหรือปฏิเสธที่จะแสดงเนื้อหาที่เราเชื่อโดยมีเหตุผลอันสมควรว่าผิดกฎหมายหรือละเมิดนโยบายของเรา ทั้งนี้ ไม่ได้หมายความว่าเราได้ทำการตรวจสอบเนื้อหาทุกครั้งเสมอไป ดังนั้น โปรดอย่าคาดการณ์ว่าเป็นเช่นนั้น"
+                                android:textColor="#000000"
+                                android:textSize="10dp" />
 
 
                         </LinearLayout>
