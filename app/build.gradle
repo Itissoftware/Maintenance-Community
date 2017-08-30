@@ -7,8 +7,8 @@ android {
         applicationId "com.mncomunity1"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 27
-        versionName "1.27"
+        versionCode 30
+        versionName "1.30"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,7 +33,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:design:25.1.1'
     compile 'com.google.code.gson:gson:2.6.1'
-    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
     compile 'com.squareup.okhttp3:okhttp:3.1.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -57,4 +57,7 @@ dependencies {
     compile 'com.romainpiel.shimmer:library:1.4.0@aar'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.github.hamsaadev:RTLMaterialSpinner:V1.0.1'
+
+
 }

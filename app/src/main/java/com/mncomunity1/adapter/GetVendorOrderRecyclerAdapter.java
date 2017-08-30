@@ -1,6 +1,7 @@
 package com.mncomunity1.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,8 +38,16 @@ public class GetVendorOrderRecyclerAdapter extends RecyclerView.Adapter<GetVendo
         DetailsVendor item = list.get(i);
         contactViewHolder.title_tv.setText(item.getTotal().get(i).getNameth());
         contactViewHolder.time.setText(item.getTotal().get(i).getTs());
-        contactViewHolder.txt_total.setText(item.getTotal().get(i).getTotal()+" จำนวน");
+        contactViewHolder.txt_total.setText(item.getTotal().get(i).getTotal() + " จำนวน");
         contactViewHolder.txt_status.setText(item.getTotal().get(i).getStatus());
+
+        if(item.getTotal().get(i).getStatus().equals("รอยืนยัน")){
+            contactViewHolder.txt_status.setTextColor(Color.parseColor("#FF0000"));
+        }else{
+            contactViewHolder.txt_status.setTextColor(Color.parseColor("#00FF7F"));
+        }
+
+
     }
 
     @Override
@@ -53,7 +62,7 @@ public class GetVendorOrderRecyclerAdapter extends RecyclerView.Adapter<GetVendo
     public static class ContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView image_logo;
-        TextView title_tv,time,txt_status;
+        TextView title_tv, time, txt_status;
         LinearLayout ls_onclick;
         TextView txt_total;
 

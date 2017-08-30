@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_whith"
@@ -38,13 +39,14 @@
 
 
                         <com.mncomunity1.until.MyTextView
+                            android:id="@+id/title_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="left"
                             android:text="รายละเอียดสินค้า"
                             android:textColor="@color/color_whith"
-                            android:textSize="20dp" />
+                            android:textSize="15dp" />
 
                     </LinearLayout>
 
@@ -141,10 +143,33 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="135dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/img_slideshow_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img_slide_header_layout">
+
+                    <com.zanlabs.widget.infiniteviewpager.InfiniteViewPager
+                        android:id="@+id/viewpager2"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:visibility="visible" />
+
+                    <com.zanlabs.widget.infiniteviewpager.indicator.CirclePageIndicator
+                        android:id="@+id/indicator2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        app:fillColor="@color/colorPrimary"
+                        app:pageColor="@color/colorPrimary" />
+                </RelativeLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -223,7 +248,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/border_button_create_account"
                         android:gravity="center"
-                        android:text="เพิ่ม"
+                        android:text="บันทึก"
                         android:textColor="@color/color_whith"
                         android:textSize="15dp" />
                 </LinearLayout>

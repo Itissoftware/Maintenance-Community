@@ -40,6 +40,10 @@ import retrofit2.Response;
 
 public class CompanyDetailActivity extends AppCompatActivity {
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     @Bind(R.id.txt_nameth)
     TextView nameTh;
 
@@ -85,17 +89,25 @@ public class CompanyDetailActivity extends AppCompatActivity {
 
     String regId;
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
-
+    TextView title_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_profile);
         ButterKnife.bind(this);
+
+        nameCompanyTh = getIntent().getStringExtra("nameCompanyTh");
+        nameCompanyEn = getIntent().getStringExtra("nameCompanyEn");
+        address = getIntent().getStringExtra("address");
+        companyCodes = getIntent().getStringExtra("companyCode");
+        cover = getIntent().getStringExtra("cover");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("รายละเอียดบริษัท");
+        title_name = (TextView) toolbar.findViewById(R.id.title_name);
+        title_name.setText(nameCompanyTh);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         regId = pref.getString("regId", null);
@@ -104,8 +116,8 @@ public class CompanyDetailActivity extends AppCompatActivity {
         img_cart = (ImageView) findViewById(R.id.img_cart);
         badge_notification_6 = (TextView) findViewById(R.id.badge_notification_6);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "0");
+
+        userId = sp.getString("userId", "000");
         Log.e("userId:", userId);
 
         dialogDetails = new Dialog(CompanyDetailActivity.this, R.style.FullHeightDialog);
@@ -122,11 +134,6 @@ public class CompanyDetailActivity extends AppCompatActivity {
             }
         });
 
-        nameCompanyTh = getIntent().getStringExtra("nameCompanyTh");
-        nameCompanyEn = getIntent().getStringExtra("nameCompanyEn");
-        address = getIntent().getStringExtra("address");
-        companyCodes = getIntent().getStringExtra("companyCode");
-        cover = getIntent().getStringExtra("cover");
 
         url = "http://mn-community.com/admin_mc/" + cover;
         Log.e("imageUrl", url);
@@ -237,6 +244,7 @@ public class CompanyDetailActivity extends AppCompatActivity {
                                     final String code = listSpare.get(position).getTotal().get(position).getId();
                                     final String url = "http://mn-community.com/admin_mc/" + listSpare.get(position).getTotal().get(position).getImg();
                                     String details = listSpare.get(position).getTotal().get(position).getDetails();
+                                    String titleCompany = listSpare.get(position).getTotal().get(position).getTitleEn();
 //                                    dialogDe = new Dialog(CompanyDetailActivity.this, R.style.FullHeightDialog);
 //                                    dialogDe.setContentView(R.layout.dailog_details_spare);
 //
@@ -252,20 +260,23 @@ public class CompanyDetailActivity extends AppCompatActivity {
 //
 //                                    txt_ddd.setText(details);
 
+                                    Log.e("titleCompany",titleCompany);
 
                                     Intent i = new Intent(getApplicationContext(), DetailsSpareActivity.class);
                                     i.putExtra("title", title);
                                     i.putExtra("image", url);
-                                    i.putExtra("details",details);
-                                    i.putExtra("companyCode",companyCode);
-                                    i.putExtra("code",code);
+                                    i.putExtra("details", details);
+                                    i.putExtra("companyCode", companyCode);
+                                    i.putExtra("code", code);
+                                    i.putExtra("titleCompany", nameCompanyTh);
                                     startActivity(i);
 
 
                                 }
                             });
 
-                            spareCheckBoxAdapter.SetOnItemTextClickListener(new SpareOnCompanyRecyclerAdapter.OnItemClickListener() {
+                            spareCheckBoxAdapter.SetOnItemTextClickListener(
+                                    new SpareOnCompanyRecyclerAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
 
@@ -437,7 +448,7 @@ public class CompanyDetailActivity extends AppCompatActivity {
 
                     }
 
-                }else{
+                } else {
                     badge_notification_6.setText("0");
                 }
 

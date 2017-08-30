@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,19 +88,36 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference messageChatDatabase;
     private StorageReference storageReference;
 
+    String UID;
+    String UIDFRIEND;
+    String USERIDFRIEND;
+
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         btn_select = (Button) findViewById(R.id.btn_select);
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "1");
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        userId = sp.getString("userId", "000");
+
         Intent intentData = getIntent();
         idFriend = intentData.getCharSequenceArrayListExtra(StaticConfig.INTENT_KEY_CHAT_ID);
         roomId = intentData.getStringExtra(StaticConfig.INTENT_KEY_CHAT_ROOM_ID);
         nameFriend = intentData.getStringExtra(StaticConfig.INTENT_KEY_CHAT_FRIEND);
+        USERIDFRIEND = intentData.getStringExtra("USERIDFRIEND");
         email = intentData.getStringExtra("email_friend");
+        UID = intentData.getStringExtra("UID");
+
+        Log.e("UID",UID+" : "+ UIDFRIEND+"");
+        Log.e("roomId",roomId+"");
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -108,12 +126,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         btnSend.setOnClickListener(this);
 
         String base64AvataUser = SharedPreferenceHelper.getInstance(this).getUserInfo().avata;
-        if (!base64AvataUser.equals(StaticConfig.STR_DEFAULT_BASE64)) {
-            byte[] decodedString = Base64.decode(base64AvataUser, Base64.DEFAULT);
-            bitmapAvataUser = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        } else {
-            bitmapAvataUser = null;
-        }
+//        if (!base64AvataUser.equals(StaticConfig.STR_DEFAULT_BASE64)) {
+//            byte[] decodedString = Base64.decode(base64AvataUser, Base64.DEFAULT);
+//            bitmapAvataUser = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//        } else {
+//            bitmapAvataUser = null;
+//        }
 
         editWriteMessage = (EditText) findViewById(R.id.editWriteMessage);
         if (idFriend != null && nameFriend != null) {
@@ -132,8 +150,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
             recyclerChat.setLayoutManager(linearLayoutManager);
-            adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
-            FirebaseDatabase.getInstance().getReference().child("message/" + roomId).addChildEventListener(new ChildEventListener() {
+            adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser,userId);
+            FirebaseDatabase.getInstance().getReference().child("Message/" + roomId).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     if (dataSnapshot.getValue() != null) {
@@ -143,7 +161,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                         newMessage.idReceiver = (String) mapMessage.get("idReceiver");
                         newMessage.text = (String) mapMessage.get("text");
                         newMessage.type = (String) mapMessage.get("type");
-                        newMessage.timestamp = (long) mapMessage.get("timestamp");
+                       // newMessage.timestamp = (long) mapMessage.get("timestamp");
                         consersation.getListMessageData().add(newMessage);
                         adapter.notifyDataSetChanged();
                         linearLayoutManager.scrollToPosition(consersation.getListMessageData().size() - 1);
@@ -180,7 +198,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        messageChatDatabase = FirebaseDatabase.getInstance().getReference().child("message/" + roomId);
+        messageChatDatabase = FirebaseDatabase.getInstance().getReference().child("Message/" + roomId);
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
     }
@@ -247,10 +265,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Message newMessage = new Message();
                 newMessage.text = content;
                 newMessage.type = Message.TYPE_TEXT;
-                newMessage.idSender = StaticConfig.UID;
-                newMessage.idReceiver = roomId;
+                newMessage.idSender = userId;
+                newMessage.idReceiver = USERIDFRIEND;
                 newMessage.timestamp = System.currentTimeMillis();
-                FirebaseDatabase.getInstance().getReference().child("message/" + roomId).push().setValue(newMessage);
+                FirebaseDatabase.getInstance().getReference().child("Message").child(roomId).push().setValue(newMessage);
 
                 sendChat(email, content, roomId,nameFriend);
             }
@@ -285,7 +303,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void uploadFileToStorage(final DatabaseReference databaseReference, Bitmap bitmap, String filename) {
-        StorageReference photoReference = storageReference.child(filename + ".jpg");
+        StorageReference photoReference = storageReference.child("chat/"+filename + ".jpg");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
         byte[] data = byteArrayOutputStream.toByteArray();
@@ -335,10 +353,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Message newMessage = new Message();
         newMessage.text = downloadUrl.toString();
         newMessage.type = Message.TYPE_IMAGE;
-        newMessage.idSender = StaticConfig.UID;
-        newMessage.idReceiver = roomId;
+        newMessage.idSender = userId;
+        newMessage.idReceiver = USERIDFRIEND;
         newMessage.timestamp = System.currentTimeMillis();
-        FirebaseDatabase.getInstance().getReference().child("message/" + roomId).push().setValue(newMessage);
+        FirebaseDatabase.getInstance().getReference().child("Message/" + roomId).push().setValue(newMessage);
 
         sendChat(email, "รูปภาพ", roomId,nameFriend);
         editWriteMessage.setText("");
@@ -358,13 +376,15 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private HashMap<String, Bitmap> bitmapAvata;
     private HashMap<String, DatabaseReference> bitmapAvataDB;
     private Bitmap bitmapAvataUser;
+    private String userId;
 
-    public ListMessageAdapter(Context context, Consersation consersation, HashMap<String, Bitmap> bitmapAvata, Bitmap bitmapAvataUser) {
+    public ListMessageAdapter(Context context, Consersation consersation, HashMap<String, Bitmap> bitmapAvata, Bitmap bitmapAvataUser,String userId) {
         this.context = context;
         this.consersation = consersation;
         this.bitmapAvata = bitmapAvata;
         this.bitmapAvataUser = bitmapAvataUser;
         bitmapAvataDB = new HashMap<>();
+        this.userId = userId;
     }
 
     @Override
@@ -419,12 +439,12 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() != null) {
                                 String avataStr = (String) dataSnapshot.getValue();
-                                if (!avataStr.equals(StaticConfig.STR_DEFAULT_BASE64)) {
-                                    byte[] decodedString = Base64.decode(avataStr, Base64.DEFAULT);
-                                    ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
-                                } else {
-                                    ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avata));
-                                }
+//                                if (!avataStr.equals(StaticConfig.STR_DEFAULT_BASE64)) {
+//                                    byte[] decodedString = Base64.decode(avataStr, Base64.DEFAULT);
+//                                    ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
+//                                } else {
+//                                    ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avata));
+//                                }
                                 notifyDataSetChanged();
                             }
                         }
@@ -475,7 +495,7 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return consersation.getListMessageData().get(position).idSender.equals(StaticConfig.UID) ? ChatActivity.VIEW_TYPE_USER_MESSAGE : ChatActivity.VIEW_TYPE_FRIEND_MESSAGE;
+        return consersation.getListMessageData().get(position).idSender.equals(userId) ? ChatActivity.VIEW_TYPE_USER_MESSAGE : ChatActivity.VIEW_TYPE_FRIEND_MESSAGE;
     }
 
     @Override

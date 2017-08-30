@@ -39,7 +39,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.mncomunity1.until.MyTextView2
                             android:id="@+id/title_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -50,8 +50,8 @@
                             android:text="Medium Text"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#000"
-                            android:textSize="13dp"
-                            android:textStyle="bold" />
+                            android:textSize="20dp"
+                            />
 
                     </LinearLayout>
 

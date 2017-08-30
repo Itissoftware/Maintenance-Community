@@ -10,6 +10,21 @@
             android:icon="@drawable/icons_bulleted"
             android:title="รายการสั่งซื้อผู้ขาย" />
 
+        <item
+            android:id="@+id/nav_3"
+            android:icon="@drawable/icons_bulleted"
+            android:title="รายการขอเสนอราคา" />
+
+        <item
+            android:id="@+id/nav_4"
+            android:icon="@drawable/icons_bulleted"
+            android:title="รายการสอบถามสินค้า" />
+
+        <item
+            android:id="@+id/nav_7"
+            android:icon="@drawable/icons_bulleted"
+            android:title="Layout" />
+
 
     </group>
 

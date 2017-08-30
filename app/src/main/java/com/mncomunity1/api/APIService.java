@@ -1,42 +1,60 @@
 package com.mncomunity1.api;
 
+import com.mncomunity1.model.BitOfferDetails;
 import com.mncomunity1.model.Category;
 import com.mncomunity1.model.CheckRead;
+import com.mncomunity1.model.CountOrderVonder;
 import com.mncomunity1.model.Delete;
 import com.mncomunity1.model.DetailsImage;
 import com.mncomunity1.model.DetailsVendor;
 import com.mncomunity1.model.GetCode;
 import com.mncomunity1.model.GetLog;
+import com.mncomunity1.model.GetMsgChat;
 import com.mncomunity1.model.GetVendorBanner;
 import com.mncomunity1.model.HistoryOrder;
 import com.mncomunity1.model.MSG;
+import com.mncomunity1.model.Mail;
+import com.mncomunity1.model.ModelPost;
 import com.mncomunity1.model.ModelSpare;
 import com.mncomunity1.model.ModelSpareDetails;
 import com.mncomunity1.model.ModelVP;
+import com.mncomunity1.model.NewPass;
 import com.mncomunity1.model.News;
 import com.mncomunity1.model.NewsRc;
 import com.mncomunity1.model.Order;
 import com.mncomunity1.model.OrderForDetails;
 import com.mncomunity1.model.OrderVendor;
 import com.mncomunity1.model.Post;
+import com.mncomunity1.model.PostBitOffer;
 import com.mncomunity1.model.PostError;
 import com.mncomunity1.model.PostOrder;
 import com.mncomunity1.model.PostS;
 import com.mncomunity1.model.PostUpdateStatus;
+import com.mncomunity1.model.PriceVndor;
 import com.mncomunity1.model.Profile;
+import com.mncomunity1.model.QuestionList;
+import com.mncomunity1.model.QuestionListVendor;
 import com.mncomunity1.model.Register;
+import com.mncomunity1.model.Result;
 import com.mncomunity1.model.SearchModel;
 import com.mncomunity1.model.SearchSpare;
+import com.mncomunity1.model.SeminarDetails;
+import com.mncomunity1.model.SeminarTitle;
+import com.mncomunity1.model.SendEmail;
 import com.mncomunity1.model.SubGroup;
 import com.mncomunity1.model.Update;
 import com.mncomunity1.model.UpdateToken;
 import com.mncomunity1.model.getOrder;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 
@@ -68,10 +86,21 @@ public interface APIService {
                                    @Field("phone") String phone,
                                    @Field("address") String address);
 
-
+    //Check notif
     @FormUrlEncoded
     @POST("/web/api/check_read.php")
     Call<CheckRead> getCheckRead(@Field("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("/web/api/check_set_to_vender.php")
+    Call<CheckRead> getCheckSenToVender(@Field("company_code") String company_code);
+
+    @FormUrlEncoded
+    @POST("/web/api/check_set_to_customer.php")
+    Call<CheckRead> getCheckSenToCustomer(@Field("user_id") String user_id);
+
+
+    ///
 
     @GET("/community_service/baner_feed.php")
     Call<ModelVP> getBandner();
@@ -134,7 +163,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("web/api/getCopany.php")
-    Call<ModelSpareDetails> getSpareCat(@Field("cat") String cat, @Field("sub") String sub);
+    Call<ModelSpareDetails> getSpareCat(@Field("cat") String cat);
 
     @FormUrlEncoded
     @POST("web/api/getSubGroup.php")
@@ -178,8 +207,13 @@ public interface APIService {
     @POST("/web/api/login.php")
     Call<MSG> userLogIn(@Field("email") String email,
                         @Field("pass") String password,
-                        @Field("regid") String regid);
+                        @Field("regid") String regid,
+                        @Field("user_id_last") String user_id_last);
 
+
+    @FormUrlEncoded
+    @POST("/web/api/loginF.php")
+    Call<MSG> userLogInF(@Field("email") String email, @Field("regid") String regid, @Field("name") String name);
 
     @FormUrlEncoded
     @POST("/web/api/update_token_user_id.php")
@@ -272,11 +306,128 @@ public interface APIService {
                                      @Field("address") String address,
                                      @Field("regid") String regid,
                                      @Field("company_nameth") String company_nameth,
-                                     @Field("password") String password);
+                                     @Field("password") String password,
+                                     @Field("userId") String userId);
 
     @FormUrlEncoded
     @POST("/web/api/register_menber_one.php")
     Call<Register> postRegisterOne(@Field("regid") String regid);
+
+
+    @FormUrlEncoded
+    @POST("/web/api/mail/index.php")
+    Call<Mail> postMail(@Field("email") String email, @Field("title") String title, @Field("details") String details);
+
+    @FormUrlEncoded
+    @POST("/web/api/get_order_count_complete_vendor.php")
+    Call<CountOrderVonder> postCountOrderVonder(@Field("company_code") String company_code);
+
+
+    @FormUrlEncoded
+    @POST("/web/api/reset_password_sendmail.php")
+    Call<SendEmail> forgetEmail(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("/web/api/reset_password_validate.php")
+    Call<SendEmail> validateCode(@Field("validate") String validate);
+
+    @FormUrlEncoded
+    @POST("/web/api/reset_password_new.php")
+    Call<NewPass> newPassword(@Field("validate") String validate, @Field("password") String password);
+
+
+    @FormUrlEncoded
+    @POST("")
+    Call<NewsRc> getSemianerList(@Field("id") String id);
+
+    //BitOffer
+    @Multipart
+    @POST("/web/api/post_bit_offer.php")
+    Call<Result> uploadImage(@Part MultipartBody.Part file,
+                             @Part("title") RequestBody title,
+                             @Part("user_id") RequestBody user_id,
+                             @Part("details") RequestBody details,
+                             @Part("category") RequestBody category,
+                             @Part("amount") RequestBody count);
+
+    @FormUrlEncoded
+    @POST("/web/api/post_bit_offer.php")
+    Call<Result> uploadText(
+            @Field("title") String title,
+            @Field("user_id") String user_id,
+            @Field("details") String details,
+            @Field("category") String category,
+            @Field("amount") String count);
+
+
+    @GET("/web/api/get_bit_offer_userid.php?")
+    Call<BitOfferDetails> getBitOfferListVendor(@Query("id") String id);
+
+    @FormUrlEncoded
+    @POST("/web/api/post_bit_offer_to_vendor.php")
+    Call<PostBitOffer> postBitOfferToVendor(@Field("user_id") String user_id,
+                                            @Field("price") String price,
+                                            @Field("company_code") String company_code,
+                                            @Field("id_bitoffer") String id_bitoffer);
+
+
+    @GET("/web/api/bitoffer/getRequestPrice.php?")
+    Call<PriceVndor> getListBitOfferToVendor(@Query("company_code") String company_code);
+
+    @GET("/web/api/bitoffer/getProductDetail.php")
+    Call<PriceVndor> getListBitOfferToVendorDetails(@Query("bit_code") String company_code);
+
+    @GET("/web/api/get_question_user_id.php?")
+    Call<QuestionList> getListQuest(@Query("user_id") String user_id);
+
+
+    @GET("/web/api/get_question_user_id_details.php?")
+    Call<QuestionListVendor> getListQuestVendor(@Query("id_bitoffer") String id_bitoffer);
+
+
+    @FormUrlEncoded
+    @POST("/web/api/bitoffer/updateRequestPrice.php")
+    Call<ModelPost> postBitOfferToVendorUpdate(@Field("req_id") String req_id,
+                                               @Field("price") String price);
+
+    @FormUrlEncoded
+    @POST("/web/api/bitoffer/updateRequestPriceStatus.php")
+    Call<ModelPost> postRequestPriceStatus(@Field("req_id") String req_id);
+
+    @FormUrlEncoded
+    @POST("/web/api/delete_bitbuffer.php")
+    Call<ModelPost> deleteBitbuffer(@Field("id") String req_id);
+
+
+    @FormUrlEncoded
+    @POST("/web/api/bitoffer/addMessage.php")
+    Call<ModelPost> postBitOfferChat(@Field("bit_vender") String bit_vender,
+                                     @Field("message") String message,
+                                     @Field("image") String image,
+                                     @Field("sender") String sender);
+
+    @GET("web/api/bitoffer/getMessage.php?")
+    Call<GetMsgChat> getChatMsg(@Query("bit_vender") String bit_vender);
+
+
+    @GET("/web/api/get_seminar_title.php?")
+    Call<SeminarTitle> getSeminar();
+
+    @GET("/web/api/get_seminar_list.php?")
+    Call<SeminarDetails> getSeminarDetails(@Query("id") String id);
+
+
+    @FormUrlEncoded
+    @POST("/web/api/post_semiar_question.php")
+    Call<Result> postsemiarQuestion(@Field("name") String name,
+                                    @Field("email") String email,
+                                    @Field("details") String details,
+                                    @Field("phone") String phone);
+
+
+//    @Multipart
+//    @POST("/web/api/post_bit_offer.php")
+//    Call<Result> uploadImage(@Part MultipartBody.Part file);
 
 
 }

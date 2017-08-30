@@ -121,7 +121,6 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:background="@drawable/bt_shape"
-                    android:onClick="clickLogin"
                     android:stateListAnimator="@drawable/state_list_animator_z"
                     android:text="เข้าสู่ระบบ"
                     android:textColor="#646464" />

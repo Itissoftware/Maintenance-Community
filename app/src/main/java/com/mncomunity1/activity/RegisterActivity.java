@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,6 +43,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     Toolbar toolbar;
 
@@ -71,7 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Bind(R.id.btn_reg)
     Button btn_reg;
 
-    Dialog dialog;
     String name;
     String email;
     String pass;
@@ -84,8 +89,6 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton radioButton;
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -94,6 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout txt_login;
 
     String regId;
+
+    Dialog dialog;
+    String userId;
 
     @Override
     protected void onStart() {
@@ -106,12 +112,22 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        txt_login = (LinearLayout) findViewById(R.id.txt_login);
         setSupportActionBar(toolbar);
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        regId = pref.getString("regId", null);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        txt_login = (LinearLayout) findViewById(R.id.txt_login);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        userId = sp.getString("userId", "000");
+
         toolbar.setTitle("ลงทะเบียน");
         ButterKnife.bind(this);
 
@@ -138,8 +154,17 @@ public class RegisterActivity extends AppCompatActivity {
                 int selectedId = radioGroup.getCheckedRadioButtonId();
                 radioButton = (RadioButton) findViewById(selectedId);
                 group = radioButton.getText().toString();
-                createUser(email, pass);
-                registerByServer(name, lastName, email, phone, address, regId, company, pass);
+
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(company)) {
+
+                    Toast.makeText(getApplicationContext(), "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();
+                } else {
+                    dialog.show();
+                    createUser(email, pass);
+                    registerByServer(name, lastName, email, phone, address, token, company, pass,userId);
+                }
+
+
             }
         });
 
@@ -148,6 +173,13 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
         subscribeToPushService();
@@ -186,13 +218,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void registerByServer(String name, String lastname, String email, String phone, String address, String regid, String company, String pass) {
+    private void registerByServer(String name, String lastname, String email, String phone, String address, String regid, String company, String pass,String userIds) {
 
 
         dialog.show();
         APIService service = ApiClient.getClient().create(APIService.class);
 
-        Call<Register> userCall = service.getRegisterUpdate(name, lastname, email, phone, address, regid, company, pass);
+        Call<Register> userCall = service.getRegisterUpdate(name, lastname, email, phone, address, regid, company, pass,userIds);
 
         userCall.enqueue(new Callback<Register>() {
             @Override
@@ -200,21 +232,28 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (response.body().getSuccess().equals("1")) {
 
-
-                    String userId = response.body().getComplete().get(0).getCode();
+                    dialog.dismiss();
+                   //  userId = response.body().getComplete().get(0).getCode();
                     String name = response.body().getComplete().get(0).getNameth();
                     String email = response.body().getComplete().get(0).getEmail();
                     String companyCode = response.body().getComplete().get(0).getCompany_code();
                     String checkStatus = response.body().getComplete().get(0).getCheck_status();
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    String vendorCheck = response.body().getComplete().get(0).getVendor();
+
+
                     editor.putBoolean("isLogin", true);
                     editor.putString("userId", userId);
                     editor.putString("name", name);
                     editor.putString("email", email);
                     editor.putString("company_code", companyCode);
                     editor.putString("check_status", checkStatus);
+                    editor.putString("check_vebdor", vendorCheck);
                     editor.commit();
 
+
+                } else {
+                    dialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "ผู้ใช้นี้มีในระบบแล้ว", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -254,7 +293,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .show();
                         } else {
                             dialog.dismiss();
-                            initNewUserInfo();
+                            initNewUserInfo(userId);
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(i);
                             finish();
@@ -266,24 +305,20 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
 
                     }
-                })
-        ;
+                });
     }
 
-    void initNewUserInfo() {
+    void initNewUserInfo(String userId) {
         User newUser = new User();
+        newUser.userId = userId;
         newUser.email = user.getEmail();
         newUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
         newUser.avata = StaticConfig.STR_DEFAULT_BASE64;
-        FirebaseDatabase.getInstance().getReference().child("user/" + user.getUid()).setValue(newUser);
+        FirebaseDatabase.getInstance().getReference().child("user/" + userId).setValue(newUser);
     }
 
     private void subscribeToPushService() {
         token = FirebaseInstanceId.getInstance().getToken();
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        SharedPreferences.Editor editor2 = pref.edit();
-        editor2.putString("regId", token);
-        editor2.commit();
 
         // Log and toast
         Log.e("AndroidBash", token);

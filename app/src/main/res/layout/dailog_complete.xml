@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="ส่งข้อมูลเสร็จ"
+                    android:text="ส่งข้อมูลสำเร็จ"
 
                     android:textColor="@color/color_black" />
 

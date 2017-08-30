@@ -23,7 +23,7 @@ public class MyTextView2 extends TextView {
     }
 
     private void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "THSarabunNew.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "THSarabunNewBold.ttf");
         setTypeface(tf);
     }
 

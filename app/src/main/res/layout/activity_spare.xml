@@ -42,7 +42,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="left"
-                            android:text="กลุ่มสินค้า"
+                            android:text="ประเภทสินค้า"
                             android:textColor="@color/color_whith"
                             android:textSize="20dp" />
 
@@ -148,26 +148,44 @@
 
         <EditText
             android:id="@+id/td_search"
-            android:layout_width="match_parent"
+            android:layout_width="160dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="2dp"
+            android:paddingLeft="5dp"
             android:focusable="true"
+            android:paddingRight="5dp"
+            android:background="@drawable/roundcorners_color"
             android:focusableInTouchMode="true"
-            android:hint="ค้นหาสินค้า"
+            android:hint="ค้นหา ชื่อสินค้า ขนาด รุ่น บริษัท"
             android:textColor="@color/color_black"
             android:textColorHint="#C0C0C0"
-            android:textSize="@dimen/text_size_14" />
+            android:textSize="11dp" />
 
         <Button
             android:id="@+id/btn_done"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="2dp"
             android:background="@drawable/border_edit_login"
             android:text="ค้นหา"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_10" />
+
+        <Button
+            android:id="@+id/btn_bit"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/border_edit_login"
+            android:text="ขอใบเสนอเราคา"
             android:textColor="@color/color_black"
             android:textSize="@dimen/text_size_10" />
 

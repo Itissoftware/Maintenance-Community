@@ -30,6 +30,10 @@ import retrofit2.Response;
 public class CompanyOrderActivity extends AppCompatActivity {
 
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     @Bind(R.id.cardList_main)
     RecyclerView recyclerView;
 
@@ -37,13 +41,13 @@ public class CompanyOrderActivity extends AppCompatActivity {
 
     ArrayList<DetailsVendor> listPost = new ArrayList<>();
     GetVendorOrderRecyclerAdapter getLogErrorRecyclerAdapter;
-    SharedPreferences sharedpreferences;
+
     String company_code;
 
     String userId;
     String check;
 
-    public static final String mypreference = "mypref";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,8 @@ public class CompanyOrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_order_vendor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
         toolbar.setTitle("ประวัติการสั่งซื้อ");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,9 +74,8 @@ public class CompanyOrderActivity extends AppCompatActivity {
 
         Log.e("company_code",company_code);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "NO");
-        check = sharedpreferences.getString("check", "0");
+        userId = sp.getString("userId", "000");
+        check = sp.getString("check", "0");
         Log.e("userId", userId);
 
 

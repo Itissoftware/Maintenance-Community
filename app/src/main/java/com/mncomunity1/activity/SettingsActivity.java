@@ -50,8 +50,9 @@ public class SettingsActivity extends AppCompatActivity {
     Button btn_done;
 
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     String userId;
     ProgressDialog dialog;
@@ -61,12 +62,13 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
-
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         dialog = ProgressDialog.show(SettingsActivity.this, "", "รอสักครู่...", true);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "1");
+
+        userId = sp.getString("userId", "1");
         Log.e("ddddd", userId);
         GetProfile(userId);
 

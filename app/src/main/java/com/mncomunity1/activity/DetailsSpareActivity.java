@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,18 +17,35 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mncomunity1.MainActivity;
 import com.mncomunity1.R;
 import com.mncomunity1.adapter.DeatailsImageRecyclerAdapter;
+import com.mncomunity1.adapter.MockPager2Adapter;
+import com.mncomunity1.adapter.MockPagerAdapter;
 import com.mncomunity1.adapter.MyImagePagerAdapter;
 import com.mncomunity1.api.APIService;
 import com.mncomunity1.model.DetailsImage;
 import com.mncomunity1.model.PostOrder;
+import com.mncomunity1.model.Register;
 import com.mncomunity1.model.getOrder;
+import com.mncomunity1.pack_chat.data.StaticConfig;
+import com.mncomunity1.pack_chat.model.User;
 import com.mncomunity1.service.ApiClient;
 import com.mncomunity1.until.SimpleDividerItemDecoration;
+import com.zanlabs.widget.infiniteviewpager.InfiniteViewPager;
+import com.zanlabs.widget.infiniteviewpager.indicator.CirclePageIndicator;
 
 import java.util.ArrayList;
 
@@ -37,12 +56,15 @@ import retrofit2.Response;
 
 public class DetailsSpareActivity extends AppCompatActivity {
 
-
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
     Dialog dialog;
 
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     String image;
     String title;
@@ -71,24 +93,43 @@ public class DetailsSpareActivity extends AppCompatActivity {
     ArrayList<String> list12 = new ArrayList<>();
 
     DeatailsImageRecyclerAdapter deatailsImageRecyclerAdapter;
-    MyImagePagerAdapter myImagePagerAdapter;
+    MockPager2Adapter myImagePagerAdapter;
     RecyclerView recyclerView;
 
-    ViewPager viewPager;
+    InfiniteViewPager viewPager;
+    CirclePageIndicator mCircleIndicator;
 
     ImageView img_cart;
     TextView badge_notification_6;
     String companyCodes;
+    String titleCompany;
+
+    Dialog dialogSubmit;
+
+    TextView title_name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_spare);
         ButterKnife.bind(this);
+        titleCompany = getIntent().getStringExtra("titleCompany");
+        image = getIntent().getStringExtra("image");
+        title = getIntent().getStringExtra("title");
+        details = getIntent().getStringExtra("details");
+        companyCode = getIntent().getStringExtra("companyCode");
+        code = getIntent().getStringExtra("code");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("รายละเอียดสินค้า");
+        title_name = (TextView) toolbar.findViewById(R.id.title_name);
+        title_name.setText(titleCompany);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +138,12 @@ public class DetailsSpareActivity extends AppCompatActivity {
             }
         });
 
+        dialogSubmit = new Dialog(DetailsSpareActivity.this, R.style.FullHeightDialog);
+        dialogSubmit.setContentView(R.layout.dailog_submit);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        initFirebase();
+        viewPager = (InfiniteViewPager) findViewById(R.id.viewpager2);
+        mCircleIndicator = (CirclePageIndicator) findViewById(R.id.indicator2);
 
         recyclerView = (RecyclerView) findViewById(R.id.cardList_main);
         recyclerView.setHasFixedSize(true);
@@ -113,20 +158,15 @@ public class DetailsSpareActivity extends AppCompatActivity {
         dialog = new Dialog(DetailsSpareActivity.this, R.style.FullHeightDialog);
         dialog.setContentView(R.layout.dailog_login);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "0");
-        companyCodes = sharedpreferences.getString("company_code", "0");
+        userId = sp.getString("userId", "000");
+        companyCodes = sp.getString("company_code", "0");
 
         img_cart = (ImageView) findViewById(R.id.img_cart);
         badge_notification_6 = (TextView) findViewById(R.id.badge_notification_6);
 
         txt_cont2 = (Button) findViewById(R.id.txt_cont2);
 
-        image = getIntent().getStringExtra("image");
-        title = getIntent().getStringExtra("title");
-        details = getIntent().getStringExtra("details");
-        companyCode = getIntent().getStringExtra("companyCode");
-        code = getIntent().getStringExtra("code");
+
         getDetailImage(code);
 
 
@@ -134,9 +174,69 @@ public class DetailsSpareActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (sp.getBoolean("isLogin", false) == false) {
 
-                PostOrder(userId, title, code, ed_num.getText().toString(), image, companyCode);
+                    dialogSubmit.show();
+                    final EditText td_name = (EditText) dialogSubmit.findViewById(R.id.td_name);
+                    final EditText td_lastname = (EditText) dialogSubmit.findViewById(R.id.td_lastname);
+                    final EditText td_phone = (EditText) dialogSubmit.findViewById(R.id.td_phone);
+                    final EditText td_mail = (EditText) dialogSubmit.findViewById(R.id.td_mail);
+                    final EditText td_address = (EditText) dialogSubmit.findViewById(R.id.td_address);
+                    final EditText td_company = (EditText) dialogSubmit.findViewById(R.id.td_company);
+                    final EditText td_password = (EditText) dialogSubmit.findViewById(R.id.td_password);
+                    LinearLayout txt_login = (LinearLayout) dialogSubmit.findViewById(R.id.txt_login);
+                    Button btn_done = (Button) dialogSubmit.findViewById(R.id.btn_done);
+                    Button btn_close = (Button) dialogSubmit.findViewById(R.id.btn_close);
 
+
+                    txt_login.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                            i.putExtra("checkLogin","1");
+                            startActivity(i);
+                            finish();
+
+                        }
+                    });
+
+                    btn_done.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String name = td_name.getText().toString();
+                            String lastName = td_lastname.getText().toString();
+                            String tdPhone = td_phone.getText().toString();
+                            String tdMail = td_mail.getText().toString();
+                            String tdAddress = td_address.getText().toString();
+                            String company = td_company.getText().toString();
+                            String password = td_password.getText().toString();
+
+                            if (name == "") {
+                                Toast.makeText(getApplicationContext(), "กรุณาใส่ข้อมูล", Toast.LENGTH_SHORT).show();
+                            } else {
+                                createUser(tdMail, password);
+                                registerByServer(name, lastName, tdMail, tdPhone, tdAddress, regId, company, password,userId);
+                            }
+
+
+                        }
+                    });
+
+                    btn_close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogSubmit.dismiss();
+                        }
+                    });
+
+
+                } else {
+
+                    PostOrder(userId, title, code, ed_num.getText().toString(), image, companyCode);
+
+
+                }
             }
         });
 
@@ -189,8 +289,13 @@ public class DetailsSpareActivity extends AppCompatActivity {
                         list12.add(response.body().getImage().get(i).getPath());
                         Log.e("image", response.body().getImage().get(i).getPath());
                     }
-                    myImagePagerAdapter = new MyImagePagerAdapter(getApplicationContext(), list12);
-                    viewPager.setAdapter(myImagePagerAdapter);
+                    if(list12.size() > 0){
+                        myImagePagerAdapter = new MockPager2Adapter(getApplicationContext());
+                        myImagePagerAdapter.setDataList(list12);
+                        viewPager.setAdapter(myImagePagerAdapter);
+                        mCircleIndicator.setViewPager(viewPager);
+                    }
+
                 }
 
             }
@@ -251,6 +356,134 @@ public class DetailsSpareActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void registerByServer(String name, String lastname, String email, String phone, String address, String regid, String company_nameth, String passwords,String userId) {
+
+
+        dialog.show();
+        APIService service = ApiClient.getClient().create(APIService.class);
+
+        Call<Register> userCall = service.getRegisterUpdate(name, lastname, email, phone, address, regid, company_nameth, passwords,userId);
+
+        userCall.enqueue(new Callback<Register>() {
+            @Override
+            public void onResponse(Call<Register> call, Response<Register> response) {
+                if (response.body().getSuccess().equals("1")) {
+
+                    String userId = response.body().getComplete().get(0).getCode();
+                    String name = response.body().getComplete().get(0).getNameth();
+                    String email = response.body().getComplete().get(0).getEmail();
+                    String companyCode = response.body().getComplete().get(0).getCompany_code();
+
+
+                    editor.putBoolean("isLogin", true);
+                    editor.putString("userId", userId);
+                    editor.putString("name", name);
+                    editor.putString("email", email);
+                    editor.putString("company_code", companyCode);
+                    editor.commit();
+
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            dialog.dismiss();
+                            Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    }, 3000);
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Register> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void createUser(String email, String password) {
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(DetailsSpareActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (!task.isSuccessful()) {
+//                            new LovelyInfoDialog(CartTotalActivity.this) {
+//                                @Override
+//                                public LovelyInfoDialog setConfirmButtonText(String text) {
+//                                    findView(com.yarolegovich.lovelydialog.R.id.ld_btn_confirm).setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View view) {
+//                                            dismiss();
+//                                        }
+//                                    });
+//                                    return super.setConfirmButtonText(text);
+//                                }
+//                            }
+//                                    .setTopColorRes(R.color.colorAccent)
+//                                    .setIcon(R.drawable.ic_add_friend)
+//                                    .setTitle("Register false")
+//                                    .setMessage("Email exist or weak password!")
+//                                    .setConfirmButtonText("ok")
+//                                    .setCancelable(false)
+//                                    .show();
+                        } else {
+                            dialog.dismiss();
+                            initNewUserInfo();
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                })
+        ;
+    }
+
+    private void initFirebase() {
+        //Khoi tao thanh phan de dang nhap, dang ky
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+
+            }
+        };
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+    void initNewUserInfo() {
+        User newUser = new User();
+        newUser.email = user.getEmail();
+        newUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
+        newUser.avata = StaticConfig.STR_DEFAULT_BASE64;
+        FirebaseDatabase.getInstance().getReference().child("user/" + user.getUid()).setValue(newUser);
     }
 
 

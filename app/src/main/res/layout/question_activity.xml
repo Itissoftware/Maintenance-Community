@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/activity_toobar" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/chk_select_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:theme="@style/MyCheckBox"
+                android:textColor="#000000"
+                android:text="เลือกทั้งหมด"
+                android:textSize="15dp" />
+
+            
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <Button
+                android:id="@+id/btn_delete_all"
+                android:layout_width="120dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:background="@drawable/rounded_border_edittext"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="ลบทั้งหมด"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/pro"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:gravity="center"
+                android:visibility="gone"
+                android:textSize="20dp"
+                android:id="@+id/txt_gone"
+                android:text="ไม่มีรายการ"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/cardList_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
+        
+    </LinearLayout>
+
+
+</RelativeLayout>

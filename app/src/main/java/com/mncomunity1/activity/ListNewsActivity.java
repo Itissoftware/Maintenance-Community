@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.mncomunity1.R;
 import com.mncomunity1.adapter.NewsRecyclerAdapter;
@@ -40,10 +41,13 @@ public class ListNewsActivity extends AppCompatActivity {
     NewsRecyclerAdapter newsRecyclerAdapter;
 
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     String userId;
+
+    ProgressBar pro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,11 @@ public class ListNewsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recyclerview);
         ButterKnife.bind(this);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "1");
+        pro = (ProgressBar) findViewById(R.id.pro);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        userId = sp.getString("userId", "000");
         toolbar.setTitle("ข่าวสาร");
 
 
@@ -92,7 +99,7 @@ public class ListNewsActivity extends AppCompatActivity {
                 if (response.body().getTotal() != null) {
                     listNews.clear();
                     for (int i = 0; i < response.body().getTotal().size(); i++) {
-
+                        pro.setVisibility(View.GONE);
                         listNews.add(response.body());
                         newsRecyclerAdapter = new NewsRecyclerAdapter(getApplicationContext(), listNews);
 

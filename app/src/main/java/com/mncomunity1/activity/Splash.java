@@ -20,6 +20,11 @@ import com.mncomunity1.until.ConnectivityReceiver;
 
 
 public class Splash extends Activity {
+
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     Handler handler;
     Runnable runnable;
     long delay_time;
@@ -32,25 +37,44 @@ public class Splash extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splashscreen);
         checkConnection();
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+
+
+        if (sp.getBoolean("isLoginF", false) == true) {
+            handler = new Handler();
+
+            runnable = new Runnable() {
+                public void run() {
+//                Intent intent = new Intent(Splash.this, LoginActivityChat.class);
+//                startActivity(intent);
+//                finish();
+                    Intent intent = new Intent(Splash.this,  MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            };
+        } else {
+
+            Intent intent = new Intent(Splash.this,  LoginActivityF.class);
+            startActivity(intent);
+            finish();
+
+        }
+
+
+
+            mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
 
             }
         };
-        handler = new Handler();
 
-        runnable = new Runnable() {
-            public void run() {
-//                Intent intent = new Intent(Splash.this, LoginActivityChat.class);
-//                startActivity(intent);
-//                finish();
-                Intent intent = new Intent(Splash.this,  MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        };
 
         subscribeToPushService();
     }
@@ -80,12 +104,6 @@ public class Splash extends Activity {
 
     private void subscribeToPushService() {
         String token = FirebaseInstanceId.getInstance().getToken();
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        SharedPreferences.Editor editor2 = pref.edit();
-        editor2.putString("regId", token);
-        editor2.commit();
-
 
     }
     private void checkConnection() {

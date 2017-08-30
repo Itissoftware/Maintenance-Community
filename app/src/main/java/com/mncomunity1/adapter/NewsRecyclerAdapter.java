@@ -44,7 +44,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
         String cover = "http://mn-community.com/admin_mc/" + item.getTotal().get(i).getCover();
 
-        Log.e("Read",item.getTotal().get(i).getRead());
+        Log.e("Read",cover);
 
         if(item.getTotal().get(i).getRead().equals("1")){
             contactViewHolder.txt_n.setVisibility(View.GONE);

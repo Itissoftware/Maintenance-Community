@@ -32,16 +32,20 @@ import retrofit2.Response;
 
 public class OrderFragment extends Fragment {
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     RecyclerView recyclerView;
 
     ArrayList<Order> listOr = new ArrayList<>();
     GetOrderRecyclerAdapter getLogErrorRecyclerAdapter;
-    SharedPreferences sharedpreferences;
+
 
     ArrayList<HistoryOrder> listPost = new ArrayList<>();
     GetHistoryOrderRecyclerAdapter getHistoryOrderRecyclerAdapter;
 
-    public static final String mypreference = "mypref";
+
 
     String userId;
     String companyCode;
@@ -65,10 +69,12 @@ public class OrderFragment extends Fragment {
 
         recyclerView.setLayoutManager(llm);
 
-        sharedpreferences = getActivity().getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "NO");
-        companyCode = sharedpreferences.getString("company_code", "1");
-        check = sharedpreferences.getString("check", "0");
+
+        sp = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        userId = sp.getString("userId", "000");
+        companyCode = sp.getString("company_code", "1");
+        check = sp.getString("check", "0");
 
         getVendor(userId);
 

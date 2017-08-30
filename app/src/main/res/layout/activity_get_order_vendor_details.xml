@@ -170,7 +170,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:gravity="right"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="horizontal">
 
         <Button

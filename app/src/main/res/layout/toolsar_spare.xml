@@ -18,9 +18,11 @@
 
 
             <com.mncomunity1.until.MyTextView
+                android:id="@+id/title_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:maxLines="1"
                 android:layout_marginTop="2dp"
                 android:text="รายการสินค้า"
                 android:textColor="@color/color_whith"

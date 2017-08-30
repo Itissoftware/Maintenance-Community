@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.mncomunity1.R;
 import com.mncomunity1.adapter.ListRecyclerAdapter;
@@ -49,6 +50,7 @@ public class ListActivity extends AppCompatActivity {
     NewsRecyclerAdapter newsRecyclerAdapter;
     ListSRecyclerAdapter listSRecyclerAdapter;
 
+    ProgressBar pro;
 
 
     SharedPreferences sharedpreferences;
@@ -61,6 +63,8 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
         ButterKnife.bind(this);
+
+        pro = (ProgressBar) findViewById(R.id.pro);
 
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         userId = sharedpreferences.getString("userId", "1");
@@ -111,7 +115,7 @@ public class ListActivity extends AppCompatActivity {
                 if (response.body().getTotal() != null) {
 
                     for (int i = 0; i < response.body().getTotal().size(); i++) {
-
+                        pro.setVisibility(View.GONE);
                         listNews.add(response.body());
                         newsRecyclerAdapter = new NewsRecyclerAdapter(getApplicationContext(), listNews);
 
@@ -195,12 +199,24 @@ public class ListActivity extends AppCompatActivity {
                 if (response.body().getPost() != null) {
 
                     for (int i = 0; i < response.body().getPost().size(); i++) {
+                        pro.setVisibility(View.GONE);
                         listPostS.add(response.body());
                         listSRecyclerAdapter = new ListSRecyclerAdapter(getApplicationContext(), listPostS);
                         // recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider));
                         recyclerView.setAdapter(listSRecyclerAdapter);
 
-                        Log.e("Title: ", listPostS.get(i).getPost().get(i).getTitle());
+                        listSRecyclerAdapter.SetOnItemVideiosClickListener(new ListSRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                String url = listPostS.get(position).getPost().get(position).getLink();
+                                String title = listPostS.get(position).getPost().get(position).getTitle();
+
+                                Intent i = new Intent(getApplicationContext(), WebTrainActivity.class);
+                                i.putExtra("url", url);
+                                i.putExtra("title", title);
+                                startActivity(i);
+                            }
+                        });
 
                     }
                 }
@@ -216,7 +232,6 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
 
 
     }

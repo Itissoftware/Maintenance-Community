@@ -35,7 +35,9 @@ import retrofit2.Response;
 
 public class SubGroupActivity extends AppCompatActivity {
 
-
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
     String cat;
 
     @Bind(R.id.cardList_main)
@@ -55,10 +57,10 @@ public class SubGroupActivity extends AppCompatActivity {
     TextView badge_notification_6;
     List<getOrder> mCartList = new ArrayList<>();
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
     String userId;
     String companyCodes;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,9 @@ public class SubGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_spare_detail);
         td_search = (EditText) findViewById(R.id.td_search);
         btn_done = (Button) findViewById(R.id.btn_done);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("ประเภทสินค้า");
@@ -82,9 +87,9 @@ public class SubGroupActivity extends AppCompatActivity {
         img_cart = (ImageView) findViewById(R.id.img_cart);
         badge_notification_6 = (TextView) findViewById(R.id.badge_notification_6);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "0");
-        companyCodes = sharedpreferences.getString("company_code","0");
+        userId = sp.getString("userId", "00000");
+        companyCodes = sp.getString("company_code","0");
+
         Log.e("userId:", userId);
 
         cat = getIntent().getStringExtra("cat");
@@ -115,7 +120,6 @@ public class SubGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);
                 i.putExtra("userId", userId);
                 i.putExtra("company_code", companyCodes);
@@ -123,8 +127,6 @@ public class SubGroupActivity extends AppCompatActivity {
 
             }
         });
-
-
 
     }
 
@@ -158,6 +160,7 @@ public class SubGroupActivity extends AppCompatActivity {
                                     Intent i = new Intent(getApplicationContext(), SpareDetailActivity.class);
                                     i.putExtra("cat", cat);
                                     i.putExtra("sub", sub);
+
                                     startActivity(i);
 
                                 }

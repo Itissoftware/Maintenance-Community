@@ -30,18 +30,21 @@ import retrofit2.Response;
 public class VendorOrderActivity extends AppCompatActivity {
 
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     @Bind(R.id.cardList_main)
     RecyclerView recyclerView;
 
     ArrayList<OrderVendor> listPost = new ArrayList<>();
     GetVendorForOrderRecyclerAdapter getLogErrorRecyclerAdapter;
-    SharedPreferences sharedpreferences;
     String company_code;
 
     String userId;
     String check;
 
-    public static final String mypreference = "mypref";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class VendorOrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_order_for_vendor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        toolbar.setTitle("ประวัติรายการผู้ขาย");
+        toolbar.setTitle("ประวัติรายการจากผู้ซื้อ");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -61,13 +64,14 @@ public class VendorOrderActivity extends AppCompatActivity {
         });
         ButterKnife.bind(this);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "NO");
-        check = sharedpreferences.getString("check", "0");
-        company_code = sharedpreferences.getString("company_code", "0");
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        userId = sp.getString("userId", "000");
+        check = sp.getString("check", "0");
+        company_code = sp.getString("company_code", "0");
 
         Log.e("company_code",company_code);
-        getLog("00004");
+        getLog(company_code);
 
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
@@ -93,9 +97,6 @@ public class VendorOrderActivity extends AppCompatActivity {
 
                     for (int i = 0; i < response.body().getTotal().size(); i++) {
                         listPost.add(response.body());
-
-                        Log.e("ffff",response.body().getTotal().get(i).getNameth());
-
 
                         getLogErrorRecyclerAdapter = new GetVendorForOrderRecyclerAdapter(getApplicationContext(), listPost);
                         recyclerView.setAdapter(getLogErrorRecyclerAdapter);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -52,6 +53,7 @@ public class WebActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         url = "http://mn-community.com/a_mcapp/index2.php?id=" + id;
+        Log.e("url",url);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setUserAgentString("Desktop");
         webview.loadUrl(url);
@@ -75,7 +77,7 @@ public class WebActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 String shareBodyText = title + url;
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject/Title");
+                intent.putExtra(Intent.EXTRA_SUBJECT, title);
                 intent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(intent, "Choose sharing method"));
             }

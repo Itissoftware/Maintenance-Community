@@ -1,6 +1,7 @@
 package com.mncomunity1.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +51,12 @@ public class MockPagerAdapter extends InfinitePagerAdapter {
         ModelVP item = mList.get(position);
         holder.position = position;
         holder.name.setText(item.getPost().get(position).getTitle());
-       // holder.description.setText(item.getDesc()+"position:"+position);
-        Glide.with(mContext)
-                .load(item.getPost().get(position).getFile_img())
 
+       // holder.description.setText(item.getDesc()+"position:"+position);
+        String url = "http://mn-community.com"+item.getPost().get(position).getFile_img();
+
+        Glide.with(mContext)
+                .load(url)
                 .into(holder.image);
         return view;
     }

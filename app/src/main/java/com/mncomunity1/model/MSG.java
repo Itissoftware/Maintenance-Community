@@ -11,6 +11,7 @@ public class MSG {
     private String regid;
     private String company_code;
     private String check;
+    private String vendor;
 
     public String getSuccess() {
         return success;
@@ -66,5 +67,13 @@ public class MSG {
 
     public void setCheck(String check) {
         this.check = check;
+    }
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
     }
 }

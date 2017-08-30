@@ -1,6 +1,8 @@
 package com.mncomunity1.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -21,6 +23,8 @@ public class WebTabActivity extends AppCompatActivity {
     String title;
     String url;
 
+    FloatingActionButton btn_sh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,8 @@ public class WebTabActivity extends AppCompatActivity {
         id = getIntent().getStringExtra("id");
         title = getIntent().getStringExtra("title");
         url = getIntent().getStringExtra("url");
+        btn_sh = (FloatingActionButton) findViewById(R.id.btn_sh);
+
 
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
@@ -46,6 +52,19 @@ public class WebTabActivity extends AppCompatActivity {
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setUserAgentString("Desktop");
         webview.loadUrl(url);
+
+        btn_sh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String shareBodyText = title + url;
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject/Title");
+                intent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
+                startActivity(Intent.createChooser(intent, "Choose sharing method"));
+            }
+        });
+
 
     }
 

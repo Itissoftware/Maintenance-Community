@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,14 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mncomunity1.MainActivity;
 import com.mncomunity1.R;
 import com.mncomunity1.adapter.CartRecyclerAdapter;
 import com.mncomunity1.api.APIService;
@@ -31,7 +40,10 @@ import com.mncomunity1.model.Delete;
 import com.mncomunity1.model.PostOrder;
 import com.mncomunity1.model.Register;
 import com.mncomunity1.model.getOrder;
+import com.mncomunity1.pack_chat.data.StaticConfig;
+import com.mncomunity1.pack_chat.model.User;
 import com.mncomunity1.service.ApiClient;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +56,10 @@ import retrofit2.Response;
 
 public class CartTotalActivity extends AppCompatActivity {
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
 
     @Bind(R.id.cardList_main)
     RecyclerView recyclerView;
@@ -51,9 +67,6 @@ public class CartTotalActivity extends AppCompatActivity {
 
     CartRecyclerAdapter cartRecyclerAdapter;
     RecyclerView cardList_main;
-
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
 
     TextView txt_total;
     Button btn_done;
@@ -75,7 +88,9 @@ public class CartTotalActivity extends AppCompatActivity {
     String regId;
     String num;
 
-    Dialog dialogSubmit;
+    String cat;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,24 +98,21 @@ public class CartTotalActivity extends AppCompatActivity {
         setContentView(R.layout.dailog_total_cart);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("ตะกร้าสินค้า");
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        regId = pref.getString("regId", null);
-        Log.e("LOf", "Firebase reg id: " + regId);
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         dialog = new Dialog(CartTotalActivity.this, R.style.FullHeightDialog);
         dialog.setContentView(R.layout.dailog_pre_complete);
 
-        dialogSubmit = new Dialog(CartTotalActivity.this, R.style.FullHeightDialog);
-        dialogSubmit.setContentView(R.layout.dailog_submit);
+        cat = getIntent().getStringExtra("cat");
 
         dialogEdit = new Dialog(CartTotalActivity.this, R.style.FullHeightDialog);
         dialogEdit.setContentView(R.layout.dailog_post_edit);
 
-        userId = sharedpreferences.getString("userId", "1");
-        userIdPre = sharedpreferences.getString("userIdPre", "1");
-        companyCode = sharedpreferences.getString("company_code", "1");
+        userId = sp.getString("userId", "00000");
+
+        companyCode = sp.getString("company_code", "1");
         //userId = getIntent().getStringExtra("userId");
 
         Log.e("userId:", userId);
@@ -240,69 +252,8 @@ public class CartTotalActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
 
-
-                                if (sharedpreferences.getBoolean("isLogin", false) == false) {
-
-                                    dialogSubmit.show();
-                                    final EditText td_name = (EditText) dialogSubmit.findViewById(R.id.td_name);
-                                    final EditText td_lastname = (EditText) dialogSubmit.findViewById(R.id.td_lastname);
-                                    final EditText td_phone = (EditText) dialogSubmit.findViewById(R.id.td_phone);
-                                    final EditText td_mail = (EditText) dialogSubmit.findViewById(R.id.td_mail);
-                                    final EditText td_address = (EditText) dialogSubmit.findViewById(R.id.td_address);
-                                    final EditText td_company = (EditText) dialogSubmit.findViewById(R.id.td_company);
-                                    final EditText td_password = (EditText) dialogSubmit.findViewById(R.id.td_password);
-                                    LinearLayout txt_login = (LinearLayout) dialogSubmit.findViewById(R.id.txt_login);
-                                    Button btn_done = (Button) dialogSubmit.findViewById(R.id.btn_done);
-                                    Button btn_close = (Button) dialogSubmit.findViewById(R.id.btn_close);
-
-
-
-
-
-                                    txt_login.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-
-                                            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                                            startActivity(i);
-                                            finish();
-
-                                        }
-                                    });
-
-                                    btn_done.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            String name = td_name.getText().toString();
-                                            String lastName = td_lastname.getText().toString();
-                                            String tdPhone = td_phone.getText().toString();
-                                            String tdMail = td_mail.getText().toString();
-                                            String tdAddress = td_address.getText().toString();
-                                            String company = td_company.getText().toString();
-                                            String password = td_password.getText().toString();
-
-                                            if (name == "") {
-                        Toast.makeText(getApplicationContext(), "กรุณาใส่ข้อมูล",Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                registerByServer(name, lastName, tdMail, tdPhone, tdAddress, regId, company, password);
-                                            }
-
-
-                                        }
-                                    });
-
-                                    btn_close.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            dialogSubmit.dismiss();
-                                        }
-                                    });
-
-
-                                } else {
-                                    dialog.show();
-                                    PostOrderComplete(userId);
-                                }
+                                dialog.show();
+                                PostOrderComplete(userId);
 
 
                             }
@@ -400,7 +351,8 @@ public class CartTotalActivity extends AppCompatActivity {
                 if (response.body().getComplete().get(0).getStatus().equals("1")) {
 
 
-                    Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);
+                    Intent i = new Intent(getApplicationContext(), SubGroupActivity.class);
+                    i.putExtra("cat",cat);
                     startActivity(i);
                     finish();
                 }
@@ -442,51 +394,9 @@ public class CartTotalActivity extends AppCompatActivity {
     }
 
 
-    private void registerByServer(String name, String lastname, String email, String phone, String address, String regid, String company_nameth, String passwords) {
 
 
-        dialog.show();
-        APIService service = ApiClient.getClient().create(APIService.class);
 
-        Call<Register> userCall = service.getRegisterUpdate(name, lastname, email, phone, address, regid, company_nameth, passwords);
-
-        userCall.enqueue(new Callback<Register>() {
-            @Override
-            public void onResponse(Call<Register> call, Response<Register> response) {
-                if (response.body().getSuccess().equals("1")) {
-
-                    String userId = response.body().getComplete().get(0).getCode();
-                    String name = response.body().getComplete().get(0).getNameth();
-                    String email = response.body().getComplete().get(0).getEmail();
-                    String companyCode = response.body().getComplete().get(0).getCompany_code();
-
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.putBoolean("isLogin", true);
-                    editor.putString("userId", userId);
-                    editor.putString("name", name);
-                    editor.putString("email", email);
-                    editor.putString("company_code", companyCode);
-                    editor.commit();
-
-                    new Handler().postDelayed(new Runnable() {
-                        public void run() {
-                            dialog.dismiss();
-                            Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);
-                            startActivity(i);
-                            finish();
-                        }
-                    }, 2000);
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Register> call, Throwable t) {
-
-            }
-        });
-    }
 
 
 }

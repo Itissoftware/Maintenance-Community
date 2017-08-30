@@ -45,6 +45,7 @@ public class Register {
         private String company_code;
         private String check_status;
         private String statusVendor;
+        private String vendor;
 
         public String getCode() {
             return code;
@@ -100,6 +101,14 @@ public class Register {
 
         public void setStatusVendor(String statusVendor) {
             this.statusVendor = statusVendor;
+        }
+
+        public String getVendor() {
+            return vendor;
+        }
+
+        public void setVendor(String vendor) {
+            this.vendor = vendor;
         }
     }
 }

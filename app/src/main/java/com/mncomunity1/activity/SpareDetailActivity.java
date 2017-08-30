@@ -37,7 +37,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SpareDetailActivity extends AppCompatActivity {
-
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     String cat;
     String sub;
@@ -60,16 +62,18 @@ public class SpareDetailActivity extends AppCompatActivity {
     Button btn_done;
     String search;
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
     String userId;
     String companyCodes;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spare_sub);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         td_search = (EditText) findViewById(R.id.td_search);
         btn_done = (Button) findViewById(R.id.btn_done);
@@ -79,9 +83,8 @@ public class SpareDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "0");
-        companyCodes = sharedpreferences.getString("company_code","0");
+        userId = sp.getString("userId", "00000");
+        companyCodes = sp.getString("company_code","0");
 
         img_cart = (ImageView) findViewById(R.id.img_cart);
         badge_notification_6 = (TextView) findViewById(R.id.badge_notification_6);
@@ -97,8 +100,7 @@ public class SpareDetailActivity extends AppCompatActivity {
 
 
         Log.e("cat",cat);
-        Log.e("sub",sub);
-        getSpareByServer(cat, sub);
+        getSpareByServer(cat);
         ButterKnife.bind(this);
 
 
@@ -130,6 +132,7 @@ public class SpareDetailActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);
                 i.putExtra("userId", userId);
                 i.putExtra("company_code", companyCodes);
+                i.putExtra("cat",cat);
                 startActivity(i);
 
             }
@@ -138,11 +141,11 @@ public class SpareDetailActivity extends AppCompatActivity {
 
     }
 
-    private void getSpareByServer(final String cat, final String sub) {
+    private void getSpareByServer(final String cat) {
 
         APIService service = ApiClient.getClient().create(APIService.class);
 
-        Call<ModelSpareDetails> userCall = service.getSpareCat(cat, sub);
+        Call<ModelSpareDetails> userCall = service.getSpareCat(cat);
 
         userCall.enqueue(new Callback<ModelSpareDetails>() {
             @Override
@@ -168,12 +171,12 @@ public class SpareDetailActivity extends AppCompatActivity {
                                     String address = listPost.get(position).getTotal().get(position).getAddress();
                                     String companyCode = listPost.get(position).getTotal().get(position).getCompanyCode();
 
+
                                     Intent i = new Intent(getApplicationContext(), CompanyDetailActivity.class);
                                     i.putExtra("nameCompanyTh", nameCompanyTh);
                                     i.putExtra("nameCompanyEn", nameCompanyEn);
                                     i.putExtra("companyCode", companyCode);
                                     i.putExtra("cover", cover);
-
                                     i.putExtra("address", address);
                                     startActivity(i);
 

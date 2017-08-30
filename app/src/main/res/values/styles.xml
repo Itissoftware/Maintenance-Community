@@ -354,6 +354,18 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#B71C1C</item>
+        <item name="colorControlActivated">#FFCC00</item>
+    </style>
+
+    <style name="MyTabs">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:backgroundStacked">@color/colorPrimary</item>
+    </style>
+
+
 
 
 </resources>

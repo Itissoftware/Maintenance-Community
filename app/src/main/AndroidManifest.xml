@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mncomunity1.activity.LoginActivity"/>
+        <activity android:name="com.mncomunity1.activity.LoginActivityF"/>
         <activity
             android:name="com.mncomunity1.activity.RegisterActivity"
             android:label="@string/title_activity_register"
@@ -109,6 +109,31 @@
             android:exported="false"
             android:persistent= "true" />
 
+        <activity android:name=".activity.ResetPassActivity"/>
+        <activity android:name=".activity.NewPassActivity"/>
+        <activity android:name=".activity.VertiCodeActivity"/>
+        <activity android:name=".activity.WebTrainActivity"/>
+        <activity android:name=".activity.AboutActivity"/>
+        <activity android:name=".activity.SeminarActivity"/>
+        <activity android:name=".activity.BitOfferActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+           />
+        <activity android:name=".activity.BitItemActivity"/>
+        <activity android:name=".activity.QuestionActivity"/>
+        <activity android:name=".activity.ListQuestionActivity"/>
+        <activity android:name=".activity.ListQuestionVendorActivity"/>
+        <activity android:name=".activity.BitItemListVendorActivity"/>
+        <activity android:name=".activity.BitItemDetailsActivity"/>
+        <activity android:name=".activity.ListQuestionChatActivity"/>
+        <activity android:name=".activity.OrderActivity"/>
+        <activity android:name=".activity.ListSeminarTitleActivity"/>
+        <activity android:name=".activity.ListSeminarDetailsActivity"/>
+
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.RegisterActivity2"/>
+        <activity android:name=".activity.LayoutDemoActivity"/>
+        <activity android:name=".pack_chat.ui.FriendsFragment"/>
+        <activity android:name=".pack_chat.ui.UserProfileFragment"/>
     </application>
 
 </manifest>

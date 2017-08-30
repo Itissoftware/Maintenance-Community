@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="จำนวน: "
+                android:text="รายการ: "
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/color_black"
                 android:textSize="15dp"

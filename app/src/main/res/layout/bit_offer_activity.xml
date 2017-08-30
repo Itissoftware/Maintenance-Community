@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefef"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/activity_toobar" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img_add"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/take_a_photo" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:background="#ffffff"
+            android:text="เลือกรูปภาพ"
+            android:textColor="#87ceeb" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:scrollIndicators="right"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--@wob8609y@wob8609y-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="ชื่อสินค้า"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/ed_name"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_border_edittext"
+                android:gravity="left"
+                android:textSize="13dp"
+                android:hint="ค้นหา ชื่อสินค้า ขนาด รุ่น บริษัท"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="#000000"
+                android:textColorHint="#C0C0C0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="จำนวนที่ต้องการ"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/ed_number"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="13dp"
+                android:background="@drawable/rounded_border_edittext"
+                android:gravity="left"
+                android:hint="จำนวน"
+                android:inputType="number"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="#000000"
+                android:textColorHint="#C0C0C0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="ราคาขั้นต่ำ"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/ed_price"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="13dp"
+                android:background="@drawable/rounded_border_edittext"
+                android:gravity="left"
+                android:hint="จำนวน"
+                android:inputType="number"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="#000000"
+                android:textColorHint="#C0C0C0" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="รายละเอียด"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/ed_details"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_border_edittext"
+                android:gravity="left"
+                android:textSize="13dp"
+                android:hint="รายละเอียด"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="#000000"
+                android:textColorHint="#C0C0C0"/>
+
+            <Button
+                android:layout_gravity="center"
+                android:id="@+id/btn_post"
+                android:textColor="#87ceeb"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:background="@drawable/rounded_border_edittext"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:text="ถัดไป" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

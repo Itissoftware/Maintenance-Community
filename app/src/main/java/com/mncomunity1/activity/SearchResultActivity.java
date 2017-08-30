@@ -1,19 +1,25 @@
 package com.mncomunity1.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.mncomunity1.R;
 import com.mncomunity1.adapter.SearchSpareRecyclerAdapter;
 import com.mncomunity1.api.APIService;
 import com.mncomunity1.model.SearchModel;
+import com.mncomunity1.model.getOrder;
 import com.mncomunity1.service.ApiClient;
 
 import java.util.ArrayList;
@@ -25,7 +31,11 @@ import retrofit2.Response;
 
 public class SearchResultActivity extends AppCompatActivity {
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
+    TextView badge_notification_6;
     EditText tdSearch;
     Button btnDone;
 
@@ -40,14 +50,26 @@ public class SearchResultActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
+    String userId;
+    String companyCodes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        userId = sp.getString("userId", "00000");
+        companyCodes = sp.getString("company_code","0");
+        Log.e("userId",userId);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("ค้นหาสินค้า");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        badge_notification_6 = (TextView) findViewById(R.id.badge_notification_6);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,16 +97,19 @@ public class SearchResultActivity extends AppCompatActivity {
 
         cardList_main.setLayoutManager(llm);
 
-        if (keyword != "") {
-            getSearch(keyword, "", "");
+        Log.e("keyword",keyword+"");
 
+        if (keyword.equals("")) {
+
+        }else{
+            getSearch(keyword, "", "");
         }
         if (keyword == "") {
 
-            getSearch("", "", "");
+           // getSearch("", "", "");
         }
         if (company_code != "") {
-            getSearch(keyword, "", company_code);
+           // getSearch(keyword, "", company_code);
         }
 
         btnDone.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +189,35 @@ public class SearchResultActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SearchModel> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void getOrder(final String user_id) {
+
+        APIService service = ApiClient.getClient().create(APIService.class);
+
+        Call<getOrder> userCall = service.getOrder(user_id);
+
+        userCall.enqueue(new Callback<getOrder>() {
+            @Override
+            public void onResponse(Call<getOrder> call, Response<getOrder> response) {
+
+                if (response.body().getTotal() != null) {
+
+                    badge_notification_6.setText(response.body().getTotal().size() + "");
+
+
+                }else{
+                    badge_notification_6.setText("0");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<getOrder> call, Throwable t) {
 
             }
         });

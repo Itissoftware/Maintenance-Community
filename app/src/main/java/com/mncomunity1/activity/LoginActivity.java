@@ -21,6 +21,7 @@ import com.mncomunity1.R;
 import com.mncomunity1.api.APIService;
 import com.mncomunity1.app.Config;
 import com.mncomunity1.model.MSG;
+import com.mncomunity1.model.Register;
 import com.mncomunity1.service.ApiClient;
 
 import butterknife.Bind;
@@ -32,6 +33,11 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -42,20 +48,30 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.btn_done)
     Button btn_done;
 
+    @Bind(R.id.btn_cancel)
+    Button btn_cancel;
+
     @Bind(R.id.td_email)
     EditText _email;
 
     @Bind(R.id.td_pass)
     EditText _pass;
 
+    @Bind(R.id.txt_forget_password)
+    TextView txtForget;
+
 
     Dialog dialog;
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
 
     SharedPreferences pref;
     String regId;
+    String userId;
+    String email;
+    String password;
+
+    String checkLogin = "1";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +80,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         subscribeToPushService();
+        checkLogin = getIntent().getStringExtra("checkLogin");
 
         pref = getSharedPreferences(Config.SHARED_PREF, 0);
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
-        if (sharedpreferences.getBoolean("isLogin", false) == true) {
+
+        if (pref.getBoolean("isLogin", false) == true) {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();
@@ -87,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent i = new Intent(getApplicationContext(), RegisterActivity2.class);
                 startActivity(i);
             }
         });
@@ -95,27 +115,46 @@ public class LoginActivity extends AppCompatActivity {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+
+                // Log.e("Login userId", userId);
+                login(userId);
+            }
+        });
+
+        txtForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ResetPassActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                finish();
             }
         });
 
 
     }
 
-    public void login() {
-        loginByServer();
+    public void login(String userIdLast) {
+        loginByServer(userIdLast);
 
     }
 
-    private void loginByServer() {
+    private void loginByServer(String userIdLast) {
 
-        String email = _email.getText().toString();
-        String password = _pass.getText().toString();
+        email = _email.getText().toString();
+        password = _pass.getText().toString();
 
         dialog.show();
         APIService service = ApiClient.getClient().create(APIService.class);
 
-        Call<MSG> userCall = service.userLogIn(email, password, regId);
+        Call<MSG> userCall = service.userLogIn(email, password, regId, userIdLast);
 
         userCall.enqueue(new Callback<MSG>() {
             @Override
@@ -131,27 +170,30 @@ public class LoginActivity extends AppCompatActivity {
                     String email = response.body().getEmail();
                     String companyCode = response.body().getCompany_code();
                     String check = response.body().getCheck();
+                    String vendorCheck = response.body().getVendor();
                     String regid = response.body().getRegid();
-                    Log.e("ssss", userId);
-                    Log.e("regid", regid);
-                    Log.e("company_code", companyCode);
 
-                    SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-                    SharedPreferences.Editor editor2 = pref.edit();
-                    editor2.putString("regId", regid);
-                    editor2.commit();
 
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putBoolean("isLogin", true);
+                    editor.putBoolean("isLoginF", true);
                     editor.putString("userId", userId);
                     editor.putString("name", name);
                     editor.putString("email", email);
                     editor.putString("company_code", companyCode);
                     editor.putString("check", check);
+                    editor.putString("check_status", check);
+                    editor.putString("check_vebdor", vendorCheck);
+                    editor.putString("password", password);
                     editor.commit();
 
-                    Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);
-                    startActivity(i);
+                    if (checkLogin.equals("0")) {
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+                    } else {
+                        Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);
+                        startActivity(i);
+                    }
+
 
                     finish();
                 } else {
@@ -171,13 +213,8 @@ public class LoginActivity extends AppCompatActivity {
 
         String token = FirebaseInstanceId.getInstance().getToken();
         regId = token;
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        SharedPreferences.Editor editor2 = pref.edit();
-        editor2.putString("regId", token);
-        editor2.commit();
-
-        // Log and toast
-        Log.e("AndroidBash", token);
-
+        Log.e("regId",regId);
     }
+
+
 }

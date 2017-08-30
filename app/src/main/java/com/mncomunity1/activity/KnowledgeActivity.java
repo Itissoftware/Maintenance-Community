@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.mncomunity1.R;
 import com.mncomunity1.adapter.KnowledgeRecyclerAdapter;
@@ -24,6 +25,7 @@ public class KnowledgeActivity extends AppCompatActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    ProgressBar pro;
 
     String id;
 
@@ -33,7 +35,7 @@ public class KnowledgeActivity extends AppCompatActivity {
     ArrayList<Post> list = new ArrayList<>();
     KnowledgeRecyclerAdapter newsArrAdapter;
 
-    String[] title = {"บทความ","เคล็ดลับและเทคนิค","แบ่งปัน"};
+    String[] title = {"บทความ","เคล็ดลับและเทคนิค","แบ่งปัน","Success Story"};
 
 
     @Override
@@ -42,6 +44,8 @@ public class KnowledgeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news);
         ButterKnife.bind(this);
 
+        pro = (ProgressBar) findViewById(R.id.pro);
+        pro.setVisibility(View.GONE);
 
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
@@ -86,6 +90,13 @@ public class KnowledgeActivity extends AppCompatActivity {
                     Intent i =new Intent(getApplicationContext(),ArticlesActivity.class);
                     i.putExtra("code","2");
                     i.putExtra("title","แบ่งปัน");
+                    startActivity(i);
+                }
+
+                if(position == 3){
+                    Intent i =new Intent(getApplicationContext(),ArticlesActivity.class);
+                    i.putExtra("code","3");
+                    i.putExtra("title","Success Story");
                     startActivity(i);
                 }
 

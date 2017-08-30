@@ -1,7 +1,9 @@
 package com.mncomunity1.pack_chat.ui;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,6 +38,11 @@ import java.util.regex.Pattern;
 
 
 public class LoginActivityChat extends AppCompatActivity {
+
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     private static String TAG = "LoginActivityChat";
     FloatingActionButton fab;
     private final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -49,6 +56,10 @@ public class LoginActivityChat extends AppCompatActivity {
     private FirebaseUser user;
     private boolean firstTimeAccess;
 
+    String email;
+    String pass;
+    String userIdM;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -59,13 +70,23 @@ public class LoginActivityChat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_chat);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        userIdM = sp.getString("userId", "000");
+        email = sp.getString("email", "");
+        pass = sp.getString("password", "");
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         editTextUsername = (EditText) findViewById(R.id.et_username);
         editTextPassword = (EditText) findViewById(R.id.et_password);
+        editTextUsername.setText(email);
+        editTextPassword.setText(pass);
         firstTimeAccess = true;
         initFirebase();
+        clickLogin();
     }
-
 
 
     private void initFirebase() {
@@ -102,8 +123,8 @@ public class LoginActivityChat extends AppCompatActivity {
     }
 
     public void clickRegisterLayout(View view) {
-       // getWindow().setExitTransition(null);
-       // getWindow().setEnterTransition(null);
+        // getWindow().setExitTransition(null);
+        // getWindow().setEnterTransition(null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options =
@@ -122,7 +143,7 @@ public class LoginActivityChat extends AppCompatActivity {
         }
     }
 
-    public void clickLogin(View view) {
+    public void clickLogin() {
         String username = editTextUsername.getText().toString();
         String password = editTextPassword.getText().toString();
         if (validate(username, password)) {
@@ -154,12 +175,7 @@ public class LoginActivityChat extends AppCompatActivity {
     }
 
     class AuthUtils {
-        /**
-         * Action register
-         *
-         * @param email
-         * @param password
-         */
+
         void createUser(String email, String password) {
             waitingDialog.setIcon(R.drawable.ic_add_friend)
                     .setTitle("Registering....")
@@ -254,7 +270,6 @@ public class LoginActivityChat extends AppCompatActivity {
                                         .setConfirmButtonText("Ok")
                                         .show();
                             } else {
-                                saveUserInfo();
                                 startActivity(new Intent(LoginActivityChat.this, MainActivityChat.class));
                                 LoginActivityChat.this.finish();
                             }
@@ -298,51 +313,33 @@ public class LoginActivityChat extends AppCompatActivity {
                                     .show();
                         }
                     })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    new LovelyInfoDialog(LoginActivityChat.this) {
+                    .addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public LovelyInfoDialog setConfirmButtonText(String text) {
-                            findView(com.yarolegovich.lovelydialog.R.id.ld_btn_confirm).setOnClickListener(new View.OnClickListener() {
+                        public void onFailure(@NonNull Exception e) {
+                            new LovelyInfoDialog(LoginActivityChat.this) {
                                 @Override
-                                public void onClick(View view) {
-                                    dismiss();
+                                public LovelyInfoDialog setConfirmButtonText(String text) {
+                                    findView(com.yarolegovich.lovelydialog.R.id.ld_btn_confirm).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            dismiss();
+                                        }
+                                    });
+                                    return super.setConfirmButtonText(text);
                                 }
-                            });
-                            return super.setConfirmButtonText(text);
+                            }
+                                    .setTopColorRes(R.color.colorAccent)
+                                    .setIcon(R.drawable.ic_pass_reset)
+                                    .setTitle("False")
+                                    .setMessage("False to sent email to " + email)
+                                    .setConfirmButtonText("Ok")
+                                    .show();
                         }
-                    }
-                            .setTopColorRes(R.color.colorAccent)
-                            .setIcon(R.drawable.ic_pass_reset)
-                            .setTitle("False")
-                            .setMessage("False to sent email to " + email)
-                            .setConfirmButtonText("Ok")
-                            .show();
-                }
-            });
+                    });
         }
 
 
-        void saveUserInfo() {
-            FirebaseDatabase.getInstance().getReference().child("user/" + StaticConfig.UID).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    waitingDialog.dismiss();
-                    HashMap hashUser = (HashMap) dataSnapshot.getValue();
-                    User userInfo = new User();
-                    userInfo.name = (String) hashUser.get("name");
-                    userInfo.email = (String) hashUser.get("email");
-                    userInfo.avata = (String) hashUser.get("avata");
-                    SharedPreferenceHelper.getInstance(LoginActivityChat.this).saveUserInfo(userInfo);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
 
 
         void initNewUserInfo() {

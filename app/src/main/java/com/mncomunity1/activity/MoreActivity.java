@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.mncomunity1.MainActivity;
 import com.mncomunity1.R;
 import com.mncomunity1.api.APIService;
+import com.mncomunity1.model.Mail;
 import com.mncomunity1.model.PostError;
 import com.mncomunity1.pack_chat.ui.LoginActivityChat;
 import com.mncomunity1.service.ApiClient;
@@ -65,6 +67,7 @@ public class MoreActivity extends AppCompatActivity {
 
 
     Dialog dialogs;
+    Dialog dialogsMail;
     Dialog dialogsProgram;
 
     String name;
@@ -75,11 +78,15 @@ public class MoreActivity extends AppCompatActivity {
     LinearLayout radio_more1;
     LinearLayout radio_program;
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     boolean isLogin;
     String check_status;
+    Button btn_done;
+
+    String details ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,16 +111,20 @@ public class MoreActivity extends AppCompatActivity {
         });
 
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
-        isLogin = sharedpreferences.getBoolean("isLogin", false);
-        Log.e("isLogin", sharedpreferences.getBoolean("isLogin", false) + "'");
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
 
-        name = sharedpreferences.getString("name", "default");
-        company = sharedpreferences.getString("company_code", "iSSOFTWARE");
-        email = sharedpreferences.getString("email", "default");
-        userId = sharedpreferences.getString("userId", "00001");
-        check_status = sharedpreferences.getString("check_status", "0");
+        isLogin = sp.getBoolean("isLogin", false);
+        Log.e("isLogin", sp.getBoolean("isLogin", false) + "'");
+
+        name = sp.getString("name", "default");
+        company = sp.getString("company_code", "iSSOFTWARE");
+        email = sp.getString("email", "default");
+        userId = sp.getString("userId", "00001");
+        check_status = sp.getString("check_status", "0");
+
+        details = "รหัสลูกค้า: "+userId+" บริษัท: "+company+"ชื่อลูกค้า: "+name;
 
         tdnsme.setEnabled(false);
         tdEmail.setEnabled(false);
@@ -123,6 +134,10 @@ public class MoreActivity extends AppCompatActivity {
 
         dialogs = new Dialog(MoreActivity.this, R.style.FullHeightDialog);
         dialogs.setContentView(R.layout.dailog_edittext);
+
+        dialogsMail = new Dialog(MoreActivity.this,R.style.FullHeightDialog);
+        dialogsMail.setContentView(R.layout.dailog_mail);
+        btn_done = (Button) dialogsMail.findViewById(R.id.btn_done);
 
 
         dialogsProgram = new Dialog(MoreActivity.this, R.style.FullHeightDialog);
@@ -150,8 +165,16 @@ public class MoreActivity extends AppCompatActivity {
                             .setPositiveButton("ยืนยัน", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // Do something on Share
-                                    sendEmail();
+                                    sendEmail("sattboot1@gmail.com","ยืนยันลุกค้าPMII",details);
                                     dialog.dismiss();
+                                    dialogsMail.show();
+                                    btn_done.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialogsMail.dismiss();
+                                            finish();
+                                        }
+                                    });
 
                                 }
                             })
@@ -218,8 +241,17 @@ public class MoreActivity extends AppCompatActivity {
                             .setPositiveButton("ยืนยัน", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // Do something on Share
-                                    sendEmail();
+                                    sendEmail("sattboot1@gmail.com","ยืนยันลูกค้าPMII",details);
                                     dialog.dismiss();
+                                    dialogsMail.show();
+                                    btn_done.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialogsMail.dismiss();
+                                            finish();
+                                        }
+                                    });
+
 
                                 }
                             })
@@ -256,16 +288,24 @@ public class MoreActivity extends AppCompatActivity {
 
                     spinner.setAdapter(dataAdapter);
 
-                    btn_submit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
 
 
-                            postServer(name, "", email, et_.getText().toString(), company, userId, spinner.getSelectedItem().toString());
-                            dialogs.dismiss();
-                            et_.setText("");
-                        }
-                    });
+                        btn_submit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                if (TextUtils.isEmpty(et_.getText().toString())) {
+                                    Toast.makeText(getApplicationContext(), "กรุณากรอกรายละเอียดการแจ้งปัญหา", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    postServer(name, "", email, et_.getText().toString(), company, userId, spinner.getSelectedItem().toString());
+                                    dialogs.dismiss();
+                                    et_.setText("");
+                                }
+                            }
+                        });
+
+
+
 
                     btn_cancel.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -332,7 +372,26 @@ public class MoreActivity extends AppCompatActivity {
         });
     }
 
-    public void sendEmail() {
+    public void sendEmail(String email,String title,String details) {
+
+        APIService service = ApiClient.getClient().create(APIService.class);
+        Call<Mail> userCall = service.postMail(email,title,details);
+
+        userCall.enqueue(new Callback<Mail>() {
+            @Override
+            public void onResponse(Call<Mail> call, Response<Mail> response) {
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Mail> call, Throwable t) {
+
+            }
+        });
+
+
+
 
     }
 

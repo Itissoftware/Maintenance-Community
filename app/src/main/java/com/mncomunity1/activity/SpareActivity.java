@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,9 +36,14 @@ import retrofit2.Response;
 
 public class SpareActivity extends AppCompatActivity {
 
+    final String PREF_NAME = "LoginPreferences";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     RecyclerView recyclerView;
     EditText tdSearch;
     Button btnDone;
+    Button btn_bit;
 
     ArrayList<Category> listPost = new ArrayList<>();
     ArrayList<SearchSpare> listSearch = new ArrayList<>();
@@ -56,8 +62,6 @@ public class SpareActivity extends AppCompatActivity {
     TextView badge_notification_6;
     List<getOrder> mCartList = new ArrayList<>();
 
-    SharedPreferences sharedpreferences;
-    public static final String mypreference = "mypref";
     String userId;
 
     String companyCodes;
@@ -68,9 +72,13 @@ public class SpareActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spare);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("กลุ่มสินค้า");
+        toolbar.setTitle("ประเภทสินค้า");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        sp = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,12 +88,15 @@ public class SpareActivity extends AppCompatActivity {
         });
         ButterKnife.bind(this);
 
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        userId = sharedpreferences.getString("userId", "0");
-        companyCodes = sharedpreferences.getString("company_code","0");
+
+
+        userId = sp.getString("userId", "00000");
+        companyCodes = sp.getString("company_code","0");
+        Log.e("userId",userId);
 
         img_cart = (ImageView) findViewById(R.id.img_cart);
         badge_notification_6 = (TextView) findViewById(R.id.badge_notification_6);
+        btn_bit = (Button) findViewById(R.id.btn_bit);
 
         recyclerView = (RecyclerView) findViewById(R.id.cardList_main);
         btnDone = (Button) findViewById(R.id.btn_done);
@@ -147,6 +158,18 @@ public class SpareActivity extends AppCompatActivity {
 
             }
         });
+
+        btn_bit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(getApplicationContext(),BitOfferActivity.class);
+                startActivity(i);
+
+
+
+            }
+        });
     }
 
     private void getSpareByServer() {
@@ -167,13 +190,20 @@ public class SpareActivity extends AppCompatActivity {
 
                             // recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider));
                             recyclerView.setAdapter(spareRecyclerAdapter);
+                            spareRecyclerAdapter.notifyDataSetChanged();
                             spareRecyclerAdapter.SetOnItemVideiosClickListener(new CategorySpareRecyclerAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     String cat = listPost.get(position).getTotal().get(position).getCat();
-                                Intent i = new Intent(getApplicationContext(), SubGroupActivity.class);
-                                i.putExtra("cat", cat);
-                                startActivity(i);
+//                                Intent i = new Intent(getApplicationContext(), SubGroupActivity.class);
+//                                i.putExtra("cat", cat);
+//                                startActivity(i);
+
+                                    Intent i = new Intent(getApplicationContext(), SpareDetailActivity.class);
+                                    i.putExtra("cat", cat);
+                                    startActivity(i);
+
+
 
                                 }
                             });
@@ -194,7 +224,6 @@ public class SpareActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
         getOrder(userId);
 
     }
