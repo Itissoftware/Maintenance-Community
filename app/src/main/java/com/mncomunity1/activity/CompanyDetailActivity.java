@@ -243,6 +243,7 @@ public class CompanyDetailActivity extends AppCompatActivity {
                                     final String companyCode = listSpare.get(position).getTotal().get(position).getCompanycode();
                                     final String code = listSpare.get(position).getTotal().get(position).getId();
                                     final String url = "http://mn-community.com/admin_mc/" + listSpare.get(position).getTotal().get(position).getImg();
+
                                     String details = listSpare.get(position).getTotal().get(position).getDetails();
                                     String titleCompany = listSpare.get(position).getTotal().get(position).getTitleEn();
 //                                    dialogDe = new Dialog(CompanyDetailActivity.this, R.style.FullHeightDialog);

@@ -44,34 +44,19 @@ public class SpareDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        if (viewType == TYPE_MOVIE) {
-            return new MovieHolder(inflater.inflate(R.layout.item_spare_details, parent, false));
-        } else {
-            return new LoadHolder(inflater.inflate(R.layout.row_load, parent, false));
-        }
+        return new MovieHolder(inflater.inflate(R.layout.item_spare_details, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (position >= getItemCount() - 1 && isMoreDataAvailable && !isLoading && loadMoreListener != null) {
-            isLoading = true;
-            loadMoreListener.onLoadMore();
-        }
-
-        if (getItemViewType(position) == TYPE_MOVIE) {
-            ((MovieHolder) holder).bindData(movies.get(position));
-        }
+        ((MovieHolder) holder).bindData(movies.get(position));
         //No else part needed as load holder doesn't bind any data
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (movies.get(position).type.equals("company")) {
-            return TYPE_MOVIE;
-        } else {
-            return TYPE_LOAD;
-        }
+        return TYPE_MOVIE;
     }
 
 

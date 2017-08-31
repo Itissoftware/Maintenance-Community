@@ -52,7 +52,7 @@ public class VendorOrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_order_for_vendor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        toolbar.setTitle("ประวัติรายการจากผู้ซื้อ");
+        toolbar.setTitle("รายการขอซื้อ");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

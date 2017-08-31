@@ -86,7 +86,6 @@ public class BitOfferActivity extends AppCompatActivity {
 
 
 
-
         ed_name = (EditText) findViewById(R.id.ed_name);
         ed_number = (EditText) findViewById(R.id.ed_number);
         ed_details = (EditText) findViewById(R.id.ed_details);

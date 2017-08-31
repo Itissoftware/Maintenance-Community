@@ -79,7 +79,7 @@ public class ListQuestionActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         cardList_main.setLayoutManager(llm);
 
-        toolbar.setTitle("รายการสินค้า");
+        toolbar.setTitle("รายการ");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

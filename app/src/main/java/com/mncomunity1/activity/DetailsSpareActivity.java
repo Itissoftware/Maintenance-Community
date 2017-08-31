@@ -166,6 +166,15 @@ public class DetailsSpareActivity extends AppCompatActivity {
 
         txt_cont2 = (Button) findViewById(R.id.txt_cont2);
 
+        list12.add(image);
+
+        Log.e("image",image);
+
+
+        myImagePagerAdapter = new MockPager2Adapter(getApplicationContext());
+        myImagePagerAdapter.setDataList(list12);
+        viewPager.setAdapter(myImagePagerAdapter);
+        mCircleIndicator.setViewPager(viewPager);
 
         getDetailImage(code);
 

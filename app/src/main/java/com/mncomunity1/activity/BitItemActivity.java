@@ -64,7 +64,7 @@ public class BitItemActivity extends AppCompatActivity {
         cardList_main.setLayoutManager(llm);
 
 
-        toolbar.setTitle("รายการที่ขอเสนอราคา");
+        toolbar.setTitle("ประวัติเสนอราคา");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -76,7 +76,7 @@ public class BitItemActivity extends AppCompatActivity {
             }
         });
 
-        getListOffer("00083");
+        getListOffer(companyCode);
     }
 
     public void getListOffer(String company_code) {

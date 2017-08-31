@@ -40,6 +40,7 @@ import android.widget.Toast;
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mncomunity1.MainActivity;
 import com.mncomunity1.MyApplication;
 import com.mncomunity1.R;
@@ -146,8 +147,6 @@ public class LayoutDemoActivity extends AppCompatActivity implements Connectivit
 
     @Bind(R.id.ls_bitoffer_price_history_vender_view)
     LinearLayout ls_bitoffer_price_history_vender_view;
-
-
 
 
     //END
@@ -330,7 +329,7 @@ public class LayoutDemoActivity extends AppCompatActivity implements Connectivit
             }
         });
         getCount(userId);
-        getCountSendToVender("00083");
+        getCountSendToVender(companyCode);
         getCountSendToCustomer(userId);
         getCountByVonder(companyCode);
 
@@ -357,86 +356,22 @@ public class LayoutDemoActivity extends AppCompatActivity implements Connectivit
 
                 // checking for type intent filter
                 if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+
+                    displayFirebaseRegId();
 
                 } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
-                    message = intent.getStringExtra("message");
-                    checkNoti = intent.getStringExtra("check");
-                    String count = intent.getStringExtra("count");
+                    String message = intent.getStringExtra("message");
 
-                    Log.e("checkNoti", checkNoti);
-
-                    Log.e("message", message);
-
-
-                    //  showDialog();
-//                    int count_noti = Integer.parseInt(count);
-//                    showNoti = sharedpreferences_count.getInt("myArrayKey", 0);
-//                    showNoti += count_noti;
-//                    myList.add(showNoti);
-
-
-                    dialogsNoti = new Dialog(LayoutDemoActivity.this, R.style.FullHeightDialog);
-                    dialogsNoti.setContentView(R.layout.dailog_noti);
-                    dialogsNoti.show();
-                    getCount(userId);
-                    Button btn_close = (Button) dialogsNoti.findViewById(R.id.btn_close);
-                    Button btn_open = (Button) dialogsNoti.findViewById(R.id.btn_open);
-                    TextView txt_dialog = (TextView) dialogsNoti.findViewById(R.id.txt_dialog);
-
-                    if (checkNoti.equals("new order")) {
-                        txt_dialog.setText("สินค้า");
-                    }
-                    if (checkNoti.equals("News")) {
-                        txt_dialog.setText("ข่าวสารใหม่!");
-                    } else {
-                        //  txt_dialog.setText(message);
-                    }
-
-
-                    btn_open.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-
-                            if (checkNoti.equals("new order")) {
-
-                                Intent iV = new Intent(getApplicationContext(), VendorOrderActivity.class);
-                                startActivity(iV);
-
-                            }
-                            if (checkNoti.equals("News")) {
-
-                                Intent i = new Intent(getApplicationContext(), ListNewsActivity.class);
-                                startActivity(i);
-
-                            }
-                            if (checkNoti.equals("vender")) {
-                                Intent i = new Intent(getApplicationContext(), BitItemActivity.class);
-                                startActivity(i);
-                            } else {
-
-                            }
-
-
-                            dialogsNoti.dismiss();
-                        }
-                    });
-
-                    btn_close.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            NotificationUtils.clearNotifications(getApplicationContext());
-                            dialogsNoti.dismiss();
-
-
-                        }
-                    });
-
+                    Toast.makeText(getApplicationContext(), "ข้อความเข้า " + message, Toast.LENGTH_LONG).show();
 
                 }
+
+
             }
         };
         checkConnection();
@@ -807,11 +742,11 @@ public class LayoutDemoActivity extends AppCompatActivity implements Connectivit
 
                 if (response.body().getTotal() != null) {
 
-                 //   badge_notification_history_vender.setVisibility(View.VISIBLE);
-                   // badge_notification_history_vender.setText(response.body().getTotal().size() + "");
+                    //   badge_notification_history_vender.setVisibility(View.VISIBLE);
+                    // badge_notification_history_vender.setText(response.body().getTotal().size() + "");
 
                 } else {
-                   // badge_notification_history_vender.setVisibility(View.GONE);
+                    // badge_notification_history_vender.setVisibility(View.GONE);
                 }
 
             }
@@ -967,10 +902,13 @@ public class LayoutDemoActivity extends AppCompatActivity implements Connectivit
                         String company_code = listbanner.get(position).getTotal().get(position).getCompany_code();
                         String company_name = listbanner.get(position).getTotal().get(position).getCompany_name();
 
-                        Intent i = new Intent(getApplicationContext(), SearchResultActivity.class);
-                        i.putExtra("company_code", company_code);
-                        i.putExtra("company_name", company_name);
-                        startActivity(i);
+
+                        Toast.makeText(getApplicationContext(), "คลิก", Toast.LENGTH_SHORT).show();
+
+//                        Intent i = new Intent(getApplicationContext(), SearchResultActivity.class);
+//                        i.putExtra("company_code", company_code);
+//                        i.putExtra("company_name", company_name);
+//                        startActivity(i);
                     }
                 });
             }
@@ -998,7 +936,7 @@ public class LayoutDemoActivity extends AppCompatActivity implements Connectivit
 
                     badge_notification_history_vender.setVisibility(TextView.VISIBLE);
                     badge_notification_history_vender.invalidate();
-                    badge_notification_history_vender.setText(countOrderByCompany+"");
+                    badge_notification_history_vender.setText(countOrderByCompany + "");
 
                 } else {
                     dialogsLogin.dismiss();
@@ -1135,14 +1073,6 @@ public class LayoutDemoActivity extends AppCompatActivity implements Connectivit
                 startActivity(about);
 
                 return;
-
-            case R.id.nav_7:
-
-                Intent layout = new Intent(getApplicationContext(), LayoutDemoActivity.class);
-                startActivity(layout);
-
-                return;
-
 
         }
 

@@ -13,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.mncomunity1.DailogActivity;
 import com.mncomunity1.MainActivity;
 import com.mncomunity1.activity.BitItemActivity;
+import com.mncomunity1.activity.LayoutDemoActivity;
 import com.mncomunity1.activity.ListNewsActivity;
 import com.mncomunity1.activity.ListQuestionActivity;
 import com.mncomunity1.activity.VendorOrderActivity;
@@ -28,7 +29,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
 
     private NotificationUtils notificationUtils;
-    String messages;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -66,8 +66,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // play notification sound
             NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
             notificationUtils.playNotificationSound();
-        } else {
+        }else{
             // If the app is in background, firebase itself handles the notification
+
+
+
         }
     }
 
@@ -83,7 +86,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String imageUrl = data.getString("image");
             String timestamp = data.getString("timestamp");
             JSONObject payload = data.getJSONObject("payload");
-            String userName = payload.getString("team");
 
             Log.e(TAG, "title: " + title);
             Log.e(TAG, "message: " + message);
@@ -91,71 +93,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "payload: " + payload.toString());
             Log.e(TAG, "imageUrl: " + imageUrl);
             Log.e(TAG, "timestamp: " + timestamp);
-            Log.e(TAG, "Username" + userName);
-            messages = message;
+
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 // app is in foreground, broadcast the push message
-                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", message);
-                pushNotification.putExtra("check", userName);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+//                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+//                pushNotification.putExtra("message", message);
+//                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+//
+//                // play notification sound
+//                NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+//                notificationUtils.playNotificationSound();
 
-                // play notification sound
-                NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-                notificationUtils.playNotificationSound();
-            } else {
-                // app is in background, show the notification in notification tray
-                
+                Intent resultIntent = new Intent(getApplicationContext(), LayoutDemoActivity.class);
+                resultIntent.putExtra("message", message);
+
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {
-
-                    if (title.equals("New Messag Chat")) {
-                        intentChatMsg(getApplicationContext(), message, userName);
-                    } else {
-
-                        if (userName.equals("new order")) {
-
-                            Intent resultIntent = new Intent(getApplicationContext(), VendorOrderActivity.class);
-                            resultIntent.putExtra("message", message);
-                            resultIntent.putExtra("check",userName);
-
-                            showNotificationMessage(getApplicationContext(), "สินค้ามาใหม่", message, timestamp, resultIntent);
-
-                        }
-                        if (userName.equals("News")) {
-
-                            Intent  resultIntent = new Intent(getApplicationContext(), ListNewsActivity.class);
-                            resultIntent.putExtra("message", message);
-                            resultIntent.putExtra("check",userName);
-                            showNotificationMessage(getApplicationContext(), "ข่าสารมาใหม่", message, timestamp, resultIntent);
-
-                        }
-
-                        if(userName.equals("vender")){
-                            Intent  resultIntent = new Intent(getApplicationContext(), BitItemActivity.class);
-                            resultIntent.putExtra("message", message);
-                            resultIntent.putExtra("check",userName);
-                            showNotificationMessage(getApplicationContext(), "สอบถามสินค้า", message, timestamp, resultIntent);
-                        }
-
-                        if(userName.equals("customer")){
-                            Intent  resultIntent = new Intent(getApplicationContext(), ListQuestionActivity.class);
-                            resultIntent.putExtra("message", message);
-                            resultIntent.putExtra("check",userName);
-                            showNotificationMessage(getApplicationContext(), "ผู้ขายเสนอราคา", message, timestamp, resultIntent);
-                        }
-
-                        else {
-
-                        }
-
-                    }
-
-
+                    showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
                 } else {
                     // image is present, show notification with image
-                    //showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
+                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
+                }
+            } else {
+                // app is in background, show the notification in notification tray
+                Intent resultIntent = new Intent(getApplicationContext(), LayoutDemoActivity.class);
+                resultIntent.putExtra("message", message);
+
+                // check for image attachment
+                if (TextUtils.isEmpty(imageUrl)) {
+                    showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
+                } else {
+                    // image is present, show notification with image
+                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
                 }
             }
         } catch (JSONException e) {
@@ -172,19 +142,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
-
     }
-
-
-    public void intentChatMsg(Context context, String msg, String name) {
-
-        Intent scheduledIntent = new Intent(context, DailogActivity.class);
-        scheduledIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        scheduledIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        scheduledIntent.putExtra("msg", msg);
-        context.startActivity(scheduledIntent);
-    }
-
 
     /**
      * Showing notification with text and image
@@ -195,4 +153,3 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
     }
 }
-

@@ -113,8 +113,8 @@ public class SpareDetailActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         int index = movies.size() - 1;
-                        loadMore(cat, index);
-                        Log.e("index", index + "");
+                      //  loadMore(cat, index);
+                       // Log.e("index", index + "");
                     }
                 });
                 //Calling loadMore function in Runnable to fix the
@@ -168,35 +168,37 @@ public class SpareDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
 
-                Log.e("response", response.body().size() + "");
                 if (response.isSuccessful()) {
-                    movies.addAll(response.body());
-                    adapter.notifyDataChanged();
 
-                    Log.e("movies", movies.size() + "");
+                    if(response.body() != null){
+                        movies.addAll(response.body());
+                        adapter.notifyDataChanged();
 
-                    recyclerView.setAdapter(adapter);
+                        recyclerView.setAdapter(adapter);
 
-                    adapter.SetOnItemVideiosClickListener(new SpareDetailRecyclerAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            String nameCompanyTh = movies.get(position).nameth;
-                            String nameCompanyEn = movies.get(position).nameen;
-                            String cover = movies.get(position).cover;
-                            String address = movies.get(position).address;
-                            String companyCode = movies.get(position).companyCode;
+                        adapter.SetOnItemVideiosClickListener(new SpareDetailRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                String nameCompanyTh = movies.get(position).nameth;
+                                String nameCompanyEn = movies.get(position).nameen;
+                                String cover = movies.get(position).cover;
+                                String address = movies.get(position).address;
+                                String companyCode = movies.get(position).companyCode;
 
 
-                            Intent i = new Intent(getApplicationContext(), CompanyDetailActivity.class);
-                            i.putExtra("nameCompanyTh", nameCompanyTh);
-                            i.putExtra("nameCompanyEn", nameCompanyEn);
-                            i.putExtra("companyCode", companyCode);
-                            i.putExtra("cover", cover);
-                            i.putExtra("address", address);
-                            startActivity(i);
+                                Intent i = new Intent(getApplicationContext(), CompanyDetailActivity.class);
+                                i.putExtra("nameCompanyTh", nameCompanyTh);
+                                i.putExtra("nameCompanyEn", nameCompanyEn);
+                                i.putExtra("companyCode", companyCode);
+                                i.putExtra("cover", cover);
+                                i.putExtra("address", address);
+                                startActivity(i);
 
-                        }
-                    });
+                            }
+                        });
+                    }
+
+
                 } else {
 
                 }
@@ -250,7 +252,7 @@ public class SpareDetailActivity extends AppCompatActivity {
     private void loadMore(String cat, int index) {
 
         //add loading progress view
-        movies.add(new MovieModel("load"));
+        movies.add(new MovieModel("company"));
         adapter.notifyItemInserted(movies.size() - 1);
 
         Call<List<MovieModel>> call = service.getSpareCat(cat, index);
@@ -269,7 +271,7 @@ public class SpareDetailActivity extends AppCompatActivity {
                         movies.addAll(result);
                     } else {//result size 0 means there is no more data available at server
                         adapter.setMoreDataAvailable(false);
-                        
+
                        // Toast.makeText(getApplicationContext(), "No More Data Available", Toast.LENGTH_LONG).show();
                     }
                     adapter.notifyDataChanged();

@@ -354,9 +354,6 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                     Button btn_open = (Button) dialogsNoti.findViewById(R.id.btn_open);
                     TextView txt_dialog = (TextView) dialogsNoti.findViewById(R.id.txt_dialog);
 
-                    if (checkNoti.equals("new order")) {
-                        txt_dialog.setText("สินค้า");
-                    }
                     if (checkNoti.equals("News")) {
                         txt_dialog.setText("ข่าวสารใหม่!");
                     } else {
@@ -369,12 +366,6 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                         public void onClick(View v) {
 
 
-                            if (checkNoti.equals("new order")) {
-
-                                Intent iV = new Intent(getApplicationContext(), VendorOrderActivity.class);
-                                startActivity(iV);
-
-                            }
                             if (checkNoti.equals("News")) {
 
                                 Intent i = new Intent(getApplicationContext(), ListNewsActivity.class);
@@ -1096,12 +1087,6 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
 
                 return;
 
-            case R.id.nav_7:
-
-                Intent layout = new Intent(getApplicationContext(), LayoutDemoActivity.class);
-                startActivity(layout);
-
-                return;
 
 
         }

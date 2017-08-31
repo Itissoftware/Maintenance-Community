@@ -165,7 +165,7 @@ public interface APIService {
     Call<GetCode> getCode(@Field("code_company") String code_company);
 
 
-    @GET("web/api/getCopany.php?")
+    @GET("web/api/getCopanyLoadMore.php?")
     Call<List<MovieModel>> getSpareCat(@Query("cat") String cat, @Query("index") int index);
 
 

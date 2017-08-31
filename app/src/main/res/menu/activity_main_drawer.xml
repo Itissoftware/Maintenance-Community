@@ -20,10 +20,7 @@
             android:icon="@drawable/icons_bulleted"
             android:title="รายการสอบถามสินค้า" />
 
-        <item
-            android:id="@+id/nav_7"
-            android:icon="@drawable/icons_bulleted"
-            android:title="Layout" />
+
 
 
     </group>
