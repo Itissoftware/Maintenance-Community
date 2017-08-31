@@ -83,7 +83,7 @@ public class LoginActivityF extends AppCompatActivity {
 
 
         if (pref.getBoolean("isLoginF", false) == true) {
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            Intent i = new Intent(getApplicationContext(), LayoutDemoActivity.class);
             startActivity(i);
             finish();
         } else {
@@ -142,7 +142,7 @@ public class LoginActivityF extends AppCompatActivity {
 
 
                 if (response.body().getSuccess().equals("1")) {
-                    startActivity(new Intent(LoginActivityF.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivityF.this, LayoutDemoActivity.class));
                     dialog.dismiss();
 
                     String userId = response.body().getId();
@@ -165,7 +165,7 @@ public class LoginActivityF extends AppCompatActivity {
                     editor.putString("check_vebdor", vendorCheck);
                     editor.commit();
 
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent i = new Intent(getApplicationContext(), LayoutDemoActivity.class);
                     startActivity(i);
 
 

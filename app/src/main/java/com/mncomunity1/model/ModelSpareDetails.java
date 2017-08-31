@@ -31,6 +31,7 @@ public class ModelSpareDetails {
         private String cover;
         private String companyCode;
         private String cat;
+        private String type;
 
         public String getNameen() {
             return nameen;
@@ -78,6 +79,14 @@ public class ModelSpareDetails {
 
         public void setCat(String cat) {
             this.cat = cat;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
     }
 }

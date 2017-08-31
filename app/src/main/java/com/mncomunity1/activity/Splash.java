@@ -52,7 +52,7 @@ public class Splash extends Activity {
 //                Intent intent = new Intent(Splash.this, LoginActivityChat.class);
 //                startActivity(intent);
 //                finish();
-                    Intent intent = new Intent(Splash.this,  MainActivity.class);
+                    Intent intent = new Intent(Splash.this,  LayoutDemoActivity.class);
                     startActivity(intent);
                     finish();
                 }

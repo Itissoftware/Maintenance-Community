@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if (pref.getBoolean("isLogin", false) == true) {
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            Intent i = new Intent(getApplicationContext(), LayoutDemoActivity.class);
             startActivity(i);
             finish();
         } else {
@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), LayoutDemoActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.commit();
 
                     if (checkLogin.equals("0")) {
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent i = new Intent(getApplicationContext(), LayoutDemoActivity.class);
                         startActivity(i);
                     } else {
                         Intent i = new Intent(getApplicationContext(), CartTotalActivity.class);

@@ -12,70 +12,108 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mncomunity1.R;
 import com.mncomunity1.model.ModelSpareDetails;
+import com.mncomunity1.model.MovieModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class SpareDetailRecyclerAdapter extends RecyclerView.Adapter<SpareDetailRecyclerAdapter.ContactViewHolder> {
+public class SpareDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context context;
-    ArrayList<ModelSpareDetails> list = new ArrayList<>();
+    public static Context context;
+    List<MovieModel> movies;
     public static OnItemClickListener mItemClickListener;
 
-    public SpareDetailRecyclerAdapter(Context context, ArrayList<ModelSpareDetails> list) {
+    public final int TYPE_MOVIE = 0;
+    public final int TYPE_LOAD = 1;
+
+    public static  OnLoadMoreListener loadMoreListener;
+    boolean isLoading = false, isMoreDataAvailable = true;
+
+    public SpareDetailRecyclerAdapter(Context context, List<MovieModel> movies) {
         this.context = context;
-        this.list = list;
+        this.movies = movies;
 
     }
 
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return movies.size();
     }
 
     @Override
-    public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
-        ModelSpareDetails item = list.get(i);
-        contactViewHolder.title_tv.setText(item.getTotal().get(i).getNameen());
-        contactViewHolder.title_address.setText(item.getTotal().get(i).getAddress());
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        if (viewType == TYPE_MOVIE) {
+            return new MovieHolder(inflater.inflate(R.layout.item_spare_details, parent, false));
+        } else {
+            return new LoadHolder(inflater.inflate(R.layout.row_load, parent, false));
+        }
+    }
 
-        if(item.getTotal().get(i).getCover() != null){
-            String url = "http://mn-community.com/admin_mc/"+item.getTotal().get(i).getCover();
-            Glide.with(context)
-                    .load(url)
-                    .centerCrop()
-                    .crossFade()
-                    .into(contactViewHolder.image_logo);
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        if (position >= getItemCount() - 1 && isMoreDataAvailable && !isLoading && loadMoreListener != null) {
+            isLoading = true;
+            loadMoreListener.onLoadMore();
         }
 
-
+        if (getItemViewType(position) == TYPE_MOVIE) {
+            ((MovieHolder) holder).bindData(movies.get(position));
+        }
+        //No else part needed as load holder doesn't bind any data
     }
 
     @Override
-    public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.item_spare_details, viewGroup, false);
-
-        return new ContactViewHolder(itemView);
+    public int getItemViewType(int position) {
+        if (movies.get(position).type.equals("company")) {
+            return TYPE_MOVIE;
+        } else {
+            return TYPE_LOAD;
+        }
     }
 
-    public static class ContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+
+    }
+
+    public void SetOnItemVideiosClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    static class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image_logo;
         TextView title_tv;
         TextView title_address;
         LinearLayout ls_onclick;
 
-        public ContactViewHolder(View v) {
+        public MovieHolder(View v) {
             super(v);
-           image_logo = (ImageView) v.findViewById(R.id.image_logo);
+            image_logo = (ImageView) v.findViewById(R.id.image_logo);
             title_tv = (TextView) v.findViewById(R.id.title_tv);
             title_address = (TextView) v.findViewById(R.id.title_address);
             ls_onclick = (LinearLayout) v.findViewById(R.id.ls_onclick);
             v.setOnClickListener(this);
             ls_onclick.setOnClickListener(this);
+        }
+
+        void bindData(MovieModel movieModel) {
+
+            title_tv.setText(movieModel.nameen);
+            title_address.setText(movieModel.address);
+
+            if (movieModel.cover != null) {
+                String url = "http://mn-community.com/admin_mc/" + movieModel.cover;
+                Glide.with(context)
+                        .load(url)
+                        .centerCrop()
+                        .crossFade()
+                        .into(image_logo);
+
+            }
         }
 
         @Override
@@ -90,13 +128,29 @@ public class SpareDetailRecyclerAdapter extends RecyclerView.Adapter<SpareDetail
         }
     }
 
-    public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
-
+    static class LoadHolder extends RecyclerView.ViewHolder {
+        public LoadHolder(View itemView) {
+            super(itemView);
+        }
     }
 
-    public void SetOnItemVideiosClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
+    public void setMoreDataAvailable(boolean moreDataAvailable) {
+        isMoreDataAvailable = moreDataAvailable;
     }
+
+    public void notifyDataChanged() {
+        notifyDataSetChanged();
+        isLoading = false;
+    }
+
+
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+
+    public void setLoadMoreListener(OnLoadMoreListener loadMoreListener) {
+        this.loadMoreListener = loadMoreListener;
+    }
+
 
 }

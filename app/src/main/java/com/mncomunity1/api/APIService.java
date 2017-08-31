@@ -18,6 +18,7 @@ import com.mncomunity1.model.ModelPost;
 import com.mncomunity1.model.ModelSpare;
 import com.mncomunity1.model.ModelSpareDetails;
 import com.mncomunity1.model.ModelVP;
+import com.mncomunity1.model.MovieModel;
 import com.mncomunity1.model.NewPass;
 import com.mncomunity1.model.News;
 import com.mncomunity1.model.NewsRc;
@@ -45,6 +46,8 @@ import com.mncomunity1.model.SubGroup;
 import com.mncomunity1.model.Update;
 import com.mncomunity1.model.UpdateToken;
 import com.mncomunity1.model.getOrder;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -161,9 +164,10 @@ public interface APIService {
     @POST("/web/get_ver_code.php")
     Call<GetCode> getCode(@Field("code_company") String code_company);
 
-    @FormUrlEncoded
-    @POST("web/api/getCopany.php")
-    Call<ModelSpareDetails> getSpareCat(@Field("cat") String cat);
+
+    @GET("web/api/getCopany.php?")
+    Call<List<MovieModel>> getSpareCat(@Query("cat") String cat, @Query("index") int index);
+
 
     @FormUrlEncoded
     @POST("web/api/getSubGroup.php")

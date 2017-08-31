@@ -293,7 +293,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                         } else {
                             dialog.dismiss();
                             initNewUserInfo(userId);
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent i = new Intent(getApplicationContext(), LayoutDemoActivity.class);
                             startActivity(i);
                             finish();
                         }
